@@ -16,7 +16,7 @@ export abstract class ExerciseRepository {
   ): Promise<ExerciseContract>;
 }
 
-abstract class CreateExerciseInputRepoContract
+export abstract class CreateExerciseInputRepoContract
   implements CreateExerciseInputContract
 {
   @IsNotEmpty()

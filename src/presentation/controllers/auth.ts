@@ -15,6 +15,7 @@ export class AuthController {
     @Body() input: SignInInputContract,
   ): Promise<HttpResponse<AuthContract>> {
     try {
+      console.log(input);
       const auth = await this.service.signIn(input);
       return {
         statusCode: 200,

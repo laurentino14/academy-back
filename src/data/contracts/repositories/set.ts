@@ -13,7 +13,7 @@ export abstract class SetRepository {
   abstract update(input: UpdateSetInputContract): Promise<SetContract>;
 }
 
-abstract class CreateSetInputRepoContract implements CreateSetInput {
+export abstract class CreateSetInputRepoContract implements CreateSetInput {
   @IsNotEmpty()
   abstract id: string;
   @IsNotEmpty()

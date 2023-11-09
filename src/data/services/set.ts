@@ -6,7 +6,9 @@ import {
 } from 'src/domain/use-cases/set';
 import { SetContract } from '../contracts/domain/set';
 import { SetRepository } from '../contracts/repositories/set';
+import { Injectable } from '@nestjs/common';
 
+@Injectable()
 export class SetService implements SetUseCases {
   constructor(private readonly repo: SetRepository) {}
   async create(input: CreateSetInput): Promise<SetContract> {

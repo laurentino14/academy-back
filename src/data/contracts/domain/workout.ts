@@ -4,6 +4,7 @@ import {
   CreateWorkoutInput,
   UpdateWorkoutInput,
 } from 'src/domain/use-cases/workout';
+import { SetContract } from './set';
 
 export abstract class WorkoutContract extends Workout {}
 
@@ -13,7 +14,7 @@ export abstract class CreateWorkoutInputContract implements CreateWorkoutInput {
   @IsNotEmpty()
   active: boolean;
   @IsNotEmpty()
-  sets: string[];
+  sets: SetContract[];
   @IsNotEmpty()
   userId: string;
   @IsNotEmpty()
@@ -28,7 +29,7 @@ export abstract class UpdateWorkoutInputContract implements UpdateWorkoutInput {
   @IsOptional()
   name?: string;
   @IsOptional()
-  sets?: string[];
+  sets?: SetContract[];
   @IsOptional()
   userId?: string;
   @IsOptional()

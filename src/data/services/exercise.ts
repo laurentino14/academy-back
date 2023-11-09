@@ -6,7 +6,9 @@ import {
 } from 'src/domain/use-cases/exercise';
 import { ExerciseContract } from '../contracts/domain/exercise';
 import { ExerciseRepository } from '../contracts/repositories/exercise';
+import { Injectable } from '@nestjs/common';
 
+@Injectable()
 export class ExerciseService implements ExerciseUseCases {
   constructor(private readonly repo: ExerciseRepository) {}
   async create(input: CreateExerciseInput): Promise<ExerciseContract> {

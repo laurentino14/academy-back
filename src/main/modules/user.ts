@@ -8,7 +8,7 @@ import { PrismaUserRepository } from 'src/infra/repositories/prisma/user';
 import { UserController } from 'src/presentation/controllers/user';
 
 @Module({
-  imports: [JwtModule.register({ secret: process.env.SECRET_KEY })],
+  imports: [JwtModule.register({})],
   controllers: [UserController],
   providers: [
     PrismaDB,
