@@ -34,12 +34,15 @@ export class AuthController {
     @Body() input: CreateUserInputContract,
   ): Promise<HttpResponse<AuthContract>> {
     try {
+      console.log(input);
       const auth = await this.service.signUp(input);
+      console.log(auth);
       return {
         statusCode: 200,
         data: auth,
       };
     } catch (err) {
+      console.log(err);
       return {
         statusCode: 400,
         data: err,

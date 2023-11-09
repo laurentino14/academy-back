@@ -16,6 +16,7 @@ export abstract class SignUpInput {
   role: Role;
   doc: string;
   name: string;
+  gender: string;
   email: string;
   birthdate: string;
   password: string;

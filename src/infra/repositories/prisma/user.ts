@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import * as bcrypt from 'bcrypt';
 import {
   UpdateUserInputContract,
   UserContract,
@@ -50,12 +51,13 @@ export class PrismaUserRepository implements UserRepository {
   }
 
   async update(input: UpdateUserInputContract): Promise<UserContract> {
+    const hash = input.password && (await bcrypt.hash(input.password, 10));
     const data = {
       name: input.name,
       email: input.email,
       birthdate: input.birthdate,
       role: input.role,
-      password: input.password,
+      password: input.password ? hash : undefined,
       updatedAt: new Date(),
     };
     const db = await this.prisma.user.update({

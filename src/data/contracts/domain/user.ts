@@ -5,10 +5,11 @@ import { CreateUserInput, UpdateUserInput } from 'src/domain/use-cases/user';
 export abstract class UserContract extends User {}
 
 export abstract class CreateUserInputContract implements CreateUserInput {
-  @IsNotEmpty()
-  role: Role;
+  role: 'ADMIN' | 'USER' | 'INSTRUCTOR';
   @IsNotEmpty()
   doc: string;
+  @IsNotEmpty()
+  gender: string;
   @IsNotEmpty()
   name: string;
   @IsNotEmpty()
@@ -24,6 +25,8 @@ export abstract class UpdateUserInputContract implements UpdateUserInput {
   id: string;
   @IsOptional()
   role?: Role;
+  @IsOptional()
+  gender?: string;
   @IsOptional()
   name?: string;
   @IsOptional()

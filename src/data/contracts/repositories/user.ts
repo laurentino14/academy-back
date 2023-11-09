@@ -21,6 +21,8 @@ export abstract class InputCreate {
   @IsNotEmpty()
   email: string;
   @IsNotEmpty()
+  gender: string;
+  @IsNotEmpty()
   birthdate: string;
   @IsNotEmpty()
   password: string;

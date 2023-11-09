@@ -18,6 +18,8 @@ export abstract class SignUpInputContract implements SignUpInput {
   @IsNotEmpty()
   doc: string;
   @IsNotEmpty()
+  gender: string;
+  @IsNotEmpty()
   name: string;
   @IsNotEmpty()
   email: string;

@@ -16,6 +16,7 @@ export class AuthService implements AuthUseCases {
   ) {}
   async signIn(input: SignInInputContract): Promise<AuthContract> {
     const user = await this.repo.signIn(input);
+    console.log(user);
     return {
       user,
       accessToken: await this.generateAToken({ sub: user.id }),
@@ -45,6 +46,7 @@ export class AuthService implements AuthUseCases {
   }
 
   async refresh(input: string): Promise<AuthContract> {
+    console.log(input);
     await this.verifyRToken(input);
     const id = await this.decode(input).sub;
     const user = await this.repo.refresh(id);
@@ -57,9 +59,9 @@ export class AuthService implements AuthUseCases {
 
   async verifyAToken(input: string): Promise<void> {
     try {
-      await this.jwt.verifyAsync(input, {
+      await this.jwt.verify(input, {
         secret: process.env.SECRET_AT,
-        maxAge: '7d',
+        maxAge: '1h',
       });
     } catch (err) {
       throw new Error('Token inválido');
@@ -68,9 +70,9 @@ export class AuthService implements AuthUseCases {
 
   async verifyRToken(input: string): Promise<void> {
     try {
-      await this.jwt.verifyAsync(input, {
+      await this.jwt.verify(input, {
         secret: process.env.SECRET_RT,
-        maxAge: '1h',
+        maxAge: '7d',
       });
     } catch (err) {
       throw new Error('Token inválido');
@@ -82,9 +84,15 @@ export class AuthService implements AuthUseCases {
   }
 
   async generateAToken(input: any): Promise<string> {
-    return await this.jwt.signAsync(input, { secret: process.env.SECRET_AT });
+    return await this.jwt.signAsync(
+      {},
+      { secret: process.env.SECRET_AT, expiresIn: '1h', subject: input.sub },
+    );
   }
   async generateRToken(input: any): Promise<string> {
-    return await this.jwt.signAsync(input, { secret: process.env.SECRET_RT });
+    return await this.jwt.signAsync(
+      {},
+      { secret: process.env.SECRET_RT, expiresIn: '7d', subject: input.sub },
+    );
   }
 }

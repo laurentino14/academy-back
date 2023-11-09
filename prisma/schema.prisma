@@ -29,9 +29,10 @@ enum Day {
 }
 
 model User {
-  id                 String    @id @map("_id") @db.ObjectId
+  id                 String    @id @map("_id")
   role               Role
   doc                String    @unique
+  gender             String
   name               String
   email              String    @unique
   birthdate          String
@@ -45,7 +46,7 @@ model User {
 }
 
 model Exercise {
-  id          String   @id @map("_id") @db.ObjectId
+  id          String   @id @map("_id")
   name        String
   description String?
   createdAt   DateTime @default(now())
@@ -61,7 +62,7 @@ model Set {
   weight     Int?
   day        Day
   exercise   Exercise @relation(fields: [exerciseId], references: [id])
-  exerciseId String   @db.ObjectId
+  exerciseId String
   Workout    Workout? @relation(fields: [workoutId], references: [id])
   workoutId  String?
   createdAt  DateTime @default(now())
@@ -76,9 +77,9 @@ model Workout {
   active       Boolean
   sets         Set[]
   User         User     @relation(name: "user", fields: [userId], references: [id])
-  userId       String   @db.ObjectId
+  userId       String
   Instructor   User?    @relation(name: "instructor", fields: [instructorId], references: [id])
-  instructorId String   @db.ObjectId
+  instructorId String
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 
