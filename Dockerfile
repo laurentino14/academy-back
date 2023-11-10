@@ -1,4 +1,4 @@
-FROM node:alpine3.18
+FROM node:18-alpine3.17
 
 # Create app directory
 
@@ -12,6 +12,11 @@ RUN npm install
 # Bundle app source
 
 COPY . .
+
+
+# Prisma Gen
+
+RUN npx prisma generate
 
 # Building app
 
