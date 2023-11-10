@@ -21,6 +21,8 @@ export class PrismaUserRepository implements UserRepository {
       include: {
         instructorWorkouts: true,
         workouts: true,
+        history: true,
+        sets: true,
       },
     });
 
@@ -33,21 +35,33 @@ export class PrismaUserRepository implements UserRepository {
       where: {
         id: input,
       },
+      include: {
+        history: true,
+        instructorWorkouts: true,
+        sets: true,
+        workouts: true,
+      },
     });
 
     if (!db) throw new Error('User not found');
 
-    return db as UserContract;
+    return db;
   }
   async getByEmail(input: string): Promise<UserContract> {
     const db = await this.prisma.user.findUnique({
       where: {
         email: input,
       },
+      include: {
+        history: true,
+        instructorWorkouts: true,
+        sets: true,
+        workouts: true,
+      },
     });
 
     if (!db) throw new Error('User not found');
-    return db as UserContract;
+    return db;
   }
 
   async update(input: UpdateUserInputContract): Promise<UserContract> {
@@ -65,9 +79,15 @@ export class PrismaUserRepository implements UserRepository {
         id: input.id,
       },
       data,
+      include: {
+        history: true,
+        instructorWorkouts: true,
+        sets: true,
+        workouts: true,
+      },
     });
 
     if (!db) throw new Error('User not found');
-    return db as UserContract;
+    return db;
   }
 }

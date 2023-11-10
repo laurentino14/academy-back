@@ -16,6 +16,15 @@ enum Role {
   ADMIN
 }
 
+enum Type {
+  BACK
+  CHEST
+  LEGS
+  SHOULDERS
+  ARMS
+  ABS
+}
+
 enum Day {
   MONDAY
   TUESDAY
@@ -41,6 +50,8 @@ model User {
   updatedAt          DateTime  @updatedAt
   workouts           Workout[] @relation(name: "user")
   instructorWorkouts Workout[] @relation(name: "instructor")
+  history            History[] @relation(name: "history")
+  sets               Set[]
 
   @@map("users")
 }
@@ -51,24 +62,53 @@ model Exercise {
   description String?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
-  Sets        Set[]
+  sets        Set[]
 
   @@map("exercises")
 }
 
+model Machine {
+  id        String   @id @map("_id")
+  name      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  sets      Set[]
+
+  @@map("machines")
+}
+
 model Set {
-  id         String   @id @map("_id")
+  id         String    @id @map("_id")
   reps       Int
   weight     Int?
   day        Day
-  exercise   Exercise @relation(fields: [exerciseId], references: [id])
+  type       Type
+  user       User      @relation(fields: [userId], references: [id])
+  userId     String
+  machine    Machine   @relation(fields: [machineId], references: [id])
+  machineId  String
+  exercise   Exercise  @relation(fields: [exerciseId], references: [id])
   exerciseId String
-  Workout    Workout? @relation(fields: [workoutId], references: [id])
+  workout    Workout?  @relation(fields: [workoutId], references: [id])
   workoutId  String?
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  history    History[]
 
   @@map("sets")
+}
+
+model History {
+  id    String @id @map("_id")
+  set   Set    @relation(fields: [setId], references: [id])
+  setId String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  user      User     @relation(fields: [userId], references: [id], name: "history")
+  userId    String
+
+  @@map("histories")
 }
 
 model Workout {
@@ -76,9 +116,9 @@ model Workout {
   name         String
   active       Boolean
   sets         Set[]
-  User         User     @relation(name: "user", fields: [userId], references: [id])
+  user         User     @relation(name: "user", fields: [userId], references: [id])
   userId       String
-  Instructor   User?    @relation(name: "instructor", fields: [instructorId], references: [id])
+  instructor   User     @relation(name: "instructor", fields: [instructorId], references: [id])
   instructorId String
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt

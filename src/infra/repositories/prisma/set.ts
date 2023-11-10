@@ -14,6 +14,12 @@ export class PrismaSetRepository implements SetRepository {
   async create(input: CreateSetInputRepoContract): Promise<SetContract> {
     const db = await this.db.set.create({
       data: input,
+      include: {
+        history: true,
+        exercise: true,
+        machine: true,
+        workout: true,
+      },
     });
 
     if (!db) throw new Error('Error on create set');
@@ -25,9 +31,32 @@ export class PrismaSetRepository implements SetRepository {
       where: {
         id: input,
       },
+      include: {
+        exercise: true,
+        machine: true,
+        workout: true,
+        history: true,
+      },
     });
 
     if (!db) throw new Error('Error on get set by id');
+
+    return db;
+  }
+  async getAllByUserID(input: string): Promise<SetContract[]> {
+    const db = await this.db.set.findMany({
+      where: {
+        userId: input,
+      },
+      include: {
+        exercise: true,
+        machine: true,
+        workout: true,
+        history: true,
+      },
+    });
+
+    if (!db) throw new Error('Error on get set by user id');
 
     return db;
   }
@@ -35,6 +64,12 @@ export class PrismaSetRepository implements SetRepository {
     const db = await this.db.set.delete({
       where: {
         id: input,
+      },
+      include: {
+        exercise: true,
+        machine: true,
+        workout: true,
+        history: true,
       },
     });
 
@@ -55,6 +90,12 @@ export class PrismaSetRepository implements SetRepository {
         id: input.id,
       },
       data,
+      include: {
+        exercise: true,
+        machine: true,
+        workout: true,
+        history: true,
+      },
     });
 
     if (!db) throw new Error('Error on update set');

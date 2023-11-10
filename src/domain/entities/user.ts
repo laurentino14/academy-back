@@ -1,3 +1,4 @@
+import { History } from './history';
 import { Workout } from './workout';
 
 export class User {
@@ -11,8 +12,9 @@ export class User {
   password: string;
   createdAt: Date | string;
   updatedAt: Date | string;
-  workouts: Workout[];
-  instructorWorkouts: Workout[];
+  workouts?: Workout[];
+  history?: History[];
+  instructorWorkouts?: Workout[];
 
   constructor(input: Partial<User>) {
     Object.assign(this, input);

@@ -1,4 +1,4 @@
-import { SetContract } from 'src/data/contracts/domain/set';
+import { Set } from '../entities/set';
 import { Workout } from '../entities/workout';
 
 export abstract class WorkoutUseCases {
@@ -13,7 +13,7 @@ export abstract class WorkoutUseCases {
 export abstract class CreateWorkoutInput {
   abstract name: string;
   abstract active: boolean;
-  abstract sets: SetContract[];
+  abstract sets: Set[];
   abstract userId: string;
   abstract instructorId: string;
 }
@@ -22,7 +22,7 @@ export abstract class UpdateWorkoutInput {
   abstract id: string;
   abstract active?: boolean;
   abstract name?: string;
-  abstract sets?: SetContract[];
+  abstract sets?: Set[];
   abstract userId?: string;
   abstract instructorId?: string;
 }

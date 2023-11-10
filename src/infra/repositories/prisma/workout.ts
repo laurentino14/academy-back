@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { ObjectId } from 'bson';
 import { WorkoutContract } from 'src/data/contracts/domain/workout';
 import {
   CreateWorkoutInputRepoContract,
@@ -15,25 +16,29 @@ export class PrismaWorkoutRepository implements WorkoutRepository {
     input: CreateWorkoutInputRepoContract,
   ): Promise<WorkoutContract> {
     const sets = input.sets.map((set) => ({
-      where: { id: set.id },
-      create: {
-        ...set,
-      },
+      ...set,
     }));
     const db = await this.db.workout.create({
       data: {
         id: input.id,
         active: input.active,
         name: input.name,
-        Instructor: {
+        instructor: {
           connect: { id: input.instructorId },
         },
         sets: {
-          connectOrCreate: sets,
+          createMany: {
+            data: sets,
+          },
         },
-        User: {
+        user: {
           connect: { id: input.userId },
         },
+      },
+      include: {
+        sets: true,
+        instructor: true,
+        user: true,
       },
     });
 
@@ -43,6 +48,11 @@ export class PrismaWorkoutRepository implements WorkoutRepository {
     const db = await this.db.workout.findUnique({
       where: {
         id: input,
+      },
+      include: {
+        instructor: true,
+        sets: true,
+        user: true,
       },
     });
 
@@ -55,6 +65,11 @@ export class PrismaWorkoutRepository implements WorkoutRepository {
       where: {
         userId: input,
       },
+      include: {
+        instructor: true,
+        user: true,
+        sets: true,
+      },
     });
 
     if (!db) throw new Error('Error on get workouts by user id');
@@ -66,6 +81,11 @@ export class PrismaWorkoutRepository implements WorkoutRepository {
       where: {
         instructorId: input,
       },
+      include: {
+        instructor: true,
+        sets: true,
+        user: true,
+      },
     });
 
     if (!db) throw new Error('Error on get workouts by instructor id');
@@ -76,6 +96,11 @@ export class PrismaWorkoutRepository implements WorkoutRepository {
     const db = await this.db.workout.delete({
       where: {
         id: input,
+      },
+      include: {
+        instructor: true,
+        sets: true,
+        user: true,
       },
     });
 
@@ -92,15 +117,20 @@ export class PrismaWorkoutRepository implements WorkoutRepository {
         active: input.active,
         name: input.name,
         sets: {
-          connectOrCreate: input.sets.map((set) => ({
-            where: { id: set.id },
-            create: {
+          createMany: {
+            data: input.sets.map((set) => ({
               ...set,
-            },
-          })),
+              id: new ObjectId().toString(),
+            })),
+          },
         },
         userId: input.userId,
         instructorId: input.instructorId,
+      },
+      include: {
+        instructor: true,
+        sets: true,
+        user: true,
       },
     });
 

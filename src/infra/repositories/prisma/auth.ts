@@ -17,6 +17,8 @@ export class PrismaAuthRepository implements AuthRepository {
       include: {
         instructorWorkouts: true,
         workouts: true,
+        history: true,
+        sets: true,
       },
     });
 
@@ -53,6 +55,8 @@ export class PrismaAuthRepository implements AuthRepository {
       include: {
         instructorWorkouts: true,
         workouts: true,
+        history: true,
+        sets: true,
       },
     });
 
@@ -69,6 +73,8 @@ export class PrismaAuthRepository implements AuthRepository {
       include: {
         instructorWorkouts: true,
         workouts: true,
+        history: true,
+        sets: true,
       },
     });
 

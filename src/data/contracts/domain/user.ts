@@ -5,6 +5,7 @@ import { CreateUserInput, UpdateUserInput } from 'src/domain/use-cases/user';
 export abstract class UserContract extends User {}
 
 export abstract class CreateUserInputContract implements CreateUserInput {
+  @IsNotEmpty()
   role: 'ADMIN' | 'USER' | 'INSTRUCTOR';
   @IsNotEmpty()
   doc: string;

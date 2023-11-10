@@ -1,4 +1,6 @@
+import { Injectable } from '@nestjs/common';
 import { ObjectId } from 'bson';
+import { Set } from 'src/domain/entities/set';
 import {
   CreateSetInput,
   SetUseCases,
@@ -6,11 +8,13 @@ import {
 } from 'src/domain/use-cases/set';
 import { SetContract } from '../contracts/domain/set';
 import { SetRepository } from '../contracts/repositories/set';
-import { Injectable } from '@nestjs/common';
 
 @Injectable()
 export class SetService implements SetUseCases {
   constructor(private readonly repo: SetRepository) {}
+  async getAllByUserID(input: string): Promise<Set[]> {
+    return await this.repo.getAllByUserID(input);
+  }
   async create(input: CreateSetInput): Promise<SetContract> {
     return await this.repo.create({ ...input, id: new ObjectId().toString() });
   }

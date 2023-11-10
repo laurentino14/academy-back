@@ -17,6 +17,9 @@ export class PrismaExerciseRepository implements ExerciseRepository {
   ): Promise<ExerciseContract> {
     const db = await this.db.exercise.create({
       data: input,
+      include: {
+        sets: true,
+      },
     });
 
     if (!db) throw new Error('Error on create exercise');
@@ -28,6 +31,9 @@ export class PrismaExerciseRepository implements ExerciseRepository {
       where: {
         id: input,
       },
+      include: {
+        sets: true,
+      },
     });
 
     if (!db) throw new Error('Error on get exercise by id');
@@ -38,6 +44,9 @@ export class PrismaExerciseRepository implements ExerciseRepository {
     const db = await this.db.exercise.delete({
       where: {
         id: input,
+      },
+      include: {
+        sets: true,
       },
     });
 
@@ -53,6 +62,9 @@ export class PrismaExerciseRepository implements ExerciseRepository {
       data: {
         name: input.name,
         description: input.description,
+      },
+      include: {
+        sets: true,
       },
     });
 

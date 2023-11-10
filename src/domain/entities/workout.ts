@@ -1,15 +1,12 @@
 import { Set } from './set';
-import { User } from './user';
 
 export class Workout {
   id: string;
-  active: boolean;
   name: string;
+  active: boolean;
   sets?: Set[];
-  User?: User;
   userId: string;
-  Instructor?: User;
   instructorId: string;
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt: Date | string;
+  updatedAt: Date | string;
 }

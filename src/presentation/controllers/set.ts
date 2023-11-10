@@ -18,10 +18,10 @@ import { HttpResponse } from '../contracts/http-reponse';
 import { AuthGuard } from '../guards/auth';
 
 @Controller('set')
+@UseGuards(AuthGuard)
 export class SetController {
   constructor(private readonly service: SetUseCases) {}
 
-  @UseGuards(AuthGuard)
   @Post()
   async create(
     @Body() input: CreateSetInput,
@@ -39,7 +39,6 @@ export class SetController {
       };
     }
   }
-  @UseGuards(AuthGuard)
   @Get(':id')
   async getById(
     @Param('id') input: string,
@@ -57,7 +56,26 @@ export class SetController {
       };
     }
   }
-  @UseGuards(AuthGuard)
+
+  @Get('user/:id')
+  async getAllByUserID(
+    @Param('id') input: string,
+  ): Promise<HttpResponse<SetContract[]>> {
+    try {
+      const handle = await this.service.getAllByUserID(input);
+      return {
+        statusCode: 200,
+        data: handle,
+      };
+    } catch (err) {
+      console.log(err);
+      return {
+        statusCode: 500,
+        data: err,
+      };
+    }
+  }
+
   @Patch()
   async update(
     @Body() input: UpdateSetInput,
@@ -75,7 +93,6 @@ export class SetController {
       };
     }
   }
-  @UseGuards(AuthGuard)
   @Delete(':id')
   async delete(@Param('id') input: string): Promise<HttpResponse<SetContract>> {
     try {

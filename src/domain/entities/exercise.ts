@@ -4,7 +4,7 @@ export class Exercise {
   id: string;
   name: string;
   description?: string;
-  createdAt: Date;
-  updatedAt: Date;
-  Sets?: Set[];
+  createdAt: Date | string;
+  updatedAt: Date | string;
+  sets: Set[];
 }

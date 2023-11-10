@@ -1,16 +1,19 @@
-export abstract class Set {
+import { History } from './history';
+export class Set {
   id: string;
   reps: number;
   weight?: number;
+  type: Type;
   day: Day;
-  createdAt: Date;
-  updatedAt: Date;
-  exerciseId: any;
-  workoutId: any;
-  Workout?: any;
-  Exercise?: any;
+  userId: string;
+  machineId: string;
+  exerciseId: string;
+  workoutId?: string;
+  createdAt: Date | string;
+  updatedAt: Date | string;
+  history?: History[];
 }
-
+export type Type = 'BACK' | 'CHEST' | 'LEGS' | 'SHOULDERS' | 'ARMS' | 'ABS';
 export type Day =
   | 'MONDAY'
   | 'TUESDAY'
