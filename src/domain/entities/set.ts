@@ -14,6 +14,7 @@ export class Set {
   history?: History[];
 }
 export type Type = 'BACK' | 'CHEST' | 'LEGS' | 'SHOULDERS' | 'ARMS' | 'ABS';
+
 export type Day =
   | 'MONDAY'
   | 'TUESDAY'
