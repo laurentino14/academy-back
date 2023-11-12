@@ -51,6 +51,7 @@ export class PrismaAuthRepository implements AuthRepository {
     const db = await this.prisma.user.create({
       data: {
         ...input,
+        hash: Math.floor(Math.random() * 1000),
       },
       include: {
         instructorWorkouts: true,
