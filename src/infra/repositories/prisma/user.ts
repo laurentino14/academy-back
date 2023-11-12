@@ -45,7 +45,8 @@ export class PrismaUserRepository implements UserRepository {
     const db = await this.prisma.user.create({
       data: {
         ...input,
-        hash: Math.floor(Math.random() * 1000),
+        hash:
+          Math.floor(Math.random() * 1000) * Math.floor(Math.random() * 1000),
       },
       include: {
         instructorWorkouts: true,
