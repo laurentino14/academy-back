@@ -3,13 +3,30 @@ import * as bcrypt from 'bcrypt';
 import { ObjectId } from 'bson';
 import { User } from 'src/domain/entities/user';
 import { UpdateUserInput, UserUseCases } from 'src/domain/use-cases/user';
-import { CreateUserInputContract } from '../contracts/domain/user';
+import {
+  CreateUserInputContract,
+  UpdateUserPasswordContract,
+} from '../contracts/domain/user';
 import { UserRepository } from '../contracts/repositories/user';
 import { verifyCPF } from '../utils/verifyCPF';
 
 @Injectable()
 export class UserService implements UserUseCases {
   constructor(private readonly repo: UserRepository) {}
+  async updatePassword(input: UpdateUserPasswordContract): Promise<User> {
+    if (input.password !== input.passwordConfirmation)
+      throw new Error('As senhas não coincidem');
+
+    const hash = await bcrypt.hash(input.password, 10);
+
+    if (!hash) throw new Error('Erro ao atualizar senha');
+
+    return await this.repo.updatePassword({
+      id: input.id,
+      password: hash,
+      oldPassword: input.oldPassword,
+    });
+  }
   async create(input: CreateUserInputContract): Promise<User> {
     const password = await bcrypt.hash(input.password, 10);
     if (!verifyCPF(input.doc)) throw new Error('CPF inválido');

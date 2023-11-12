@@ -5,6 +5,7 @@ export abstract class UserUseCases {
   abstract getById(input: string): Promise<User>;
   abstract getByEmail(input: string): Promise<User>;
   abstract update(input: UpdateUserInput): Promise<User>;
+  abstract updatePassword(input: UpdatePasswordInput): Promise<User>;
 }
 
 export abstract class CreateUserInput {
@@ -17,12 +18,16 @@ export abstract class CreateUserInput {
   abstract password: string;
 }
 
+export abstract class UpdatePasswordInput {
+  abstract id: string;
+  abstract password: string;
+  abstract passwordConfirmation: string;
+  abstract oldPassword: string;
+}
+
 export abstract class UpdateUserInput {
   abstract id: string;
-  abstract role?: Role;
-  abstract gender?: string;
   abstract name?: string;
   abstract email?: string;
-  abstract birthdate?: string;
-  abstract password?: string;
+  abstract password: string;
 }

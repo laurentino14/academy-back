@@ -7,8 +7,17 @@ export abstract class UserRepository {
   abstract getById(input: string): Promise<UserContract>;
   abstract getByEmail(input: string): Promise<UserContract>;
   abstract update(input: UpdateUserInputContract): Promise<UserContract>;
+  abstract updatePassword(input: InputUpdatePassword): Promise<UserContract>;
 }
 
+export abstract class InputUpdatePassword {
+  @IsNotEmpty()
+  id: string;
+  @IsNotEmpty()
+  password: string;
+  @IsNotEmpty()
+  oldPassword: string;
+}
 export abstract class InputCreate {
   @IsNotEmpty()
   id: string;

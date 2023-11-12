@@ -6,6 +6,7 @@ import {
 } from 'src/data/contracts/domain/user';
 import {
   InputCreate,
+  InputUpdatePassword,
   UserRepository,
 } from 'src/data/contracts/repositories/user';
 import { PrismaDB } from 'src/infra/data-sources/prisma';
@@ -13,10 +14,38 @@ import { PrismaDB } from 'src/infra/data-sources/prisma';
 @Injectable()
 export class PrismaUserRepository implements UserRepository {
   constructor(private readonly prisma: PrismaDB) {}
+  async updatePassword(input: InputUpdatePassword): Promise<UserContract> {
+    const find = await this.prisma.user.findUnique({
+      where: {
+        id: input.id,
+      },
+    });
+
+    if (!find) throw new Error('User not found');
+
+    const compare = await bcrypt.compare(input.oldPassword, find.password);
+
+    if (!compare) throw new Error('Old password is incorrect');
+
+    const db = await this.prisma.user.update({
+      where: {
+        id: input.id,
+      },
+      data: {
+        password: input.password,
+        updatedAt: new Date(),
+      },
+    });
+
+    if (!db) throw new Error('Error on update password');
+
+    return db;
+  }
   async create(input: InputCreate): Promise<UserContract> {
     const db = await this.prisma.user.create({
       data: {
         ...input,
+        hash: Math.floor(Math.random() * 1000),
       },
       include: {
         instructorWorkouts: true,
@@ -65,13 +94,21 @@ export class PrismaUserRepository implements UserRepository {
   }
 
   async update(input: UpdateUserInputContract): Promise<UserContract> {
-    const hash = input.password && (await bcrypt.hash(input.password, 10));
+    const find = await this.prisma.user.findUnique({
+      where: {
+        id: input.id,
+      },
+    });
+
+    if (!find) throw new Error('User not found');
+
+    const compare = await bcrypt.compare(input.password, find.password);
+
+    if (!compare) throw new Error('Password is incorrect');
+
     const data = {
       name: input.name,
       email: input.email,
-      birthdate: input.birthdate,
-      role: input.role,
-      password: input.password ? hash : undefined,
       updatedAt: new Date(),
     };
     const db = await this.prisma.user.update({

@@ -1,9 +1,25 @@
 import { IsNotEmpty, IsOptional } from 'class-validator';
-import { Role, User } from 'src/domain/entities/user';
-import { CreateUserInput, UpdateUserInput } from 'src/domain/use-cases/user';
+import { User } from 'src/domain/entities/user';
+import {
+  CreateUserInput,
+  UpdatePasswordInput,
+  UpdateUserInput,
+} from 'src/domain/use-cases/user';
 
 export abstract class UserContract extends User {}
 
+export abstract class UpdateUserPasswordContract
+  implements UpdatePasswordInput
+{
+  @IsNotEmpty()
+  id: string;
+  @IsNotEmpty()
+  password: string;
+  @IsNotEmpty()
+  passwordConfirmation: string;
+  @IsNotEmpty()
+  oldPassword: string;
+}
 export abstract class CreateUserInputContract implements CreateUserInput {
   @IsNotEmpty()
   role: 'ADMIN' | 'USER' | 'INSTRUCTOR';
@@ -24,16 +40,12 @@ export abstract class CreateUserInputContract implements CreateUserInput {
 export abstract class UpdateUserInputContract implements UpdateUserInput {
   @IsNotEmpty()
   id: string;
-  @IsOptional()
-  role?: Role;
-  @IsOptional()
-  gender?: string;
+
   @IsOptional()
   name?: string;
   @IsOptional()
   email?: string;
-  @IsOptional()
-  birthdate?: string;
-  @IsOptional()
-  password?: string;
+
+  @IsNotEmpty()
+  password: string;
 }

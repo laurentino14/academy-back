@@ -10,6 +10,8 @@ import {
 import {
   CreateUserInputContract,
   UpdateUserInputContract,
+  UpdateUserPasswordContract,
+  UserContract,
 } from 'src/data/contracts/domain/user';
 import { User } from 'src/domain/entities/user';
 import { UserUseCases } from 'src/domain/use-cases/user';
@@ -19,6 +21,7 @@ import { AuthGuard } from '../guards/auth';
 @Controller('user')
 export class UserController {
   constructor(private readonly service: UserUseCases) {}
+
   @Post()
   async create(
     @Body() input: CreateUserInputContract,
@@ -77,6 +80,24 @@ export class UserController {
     console.log(input);
     try {
       const user = await this.service.update(input);
+      return {
+        statusCode: 200,
+        data: user,
+      };
+    } catch (err) {
+      return {
+        statusCode: 500,
+        data: err,
+      };
+    }
+  }
+
+  @Patch('password')
+  async updatePassword(
+    @Body() input: UpdateUserPasswordContract,
+  ): Promise<HttpResponse<UserContract>> {
+    try {
+      const user = await this.service.updatePassword(input);
       return {
         statusCode: 200,
         data: user,
