@@ -1,3 +1,4 @@
+import { SetWorkoutModel } from 'src/data/contracts/domain/workout';
 import { Set } from '../entities/set';
 import { Workout } from '../entities/workout';
 
@@ -13,7 +14,7 @@ export abstract class WorkoutUseCases {
 export abstract class CreateWorkoutInput {
   abstract name: string;
   abstract active: boolean;
-  abstract sets: Set[];
+  abstract sets: SetWorkoutModel[];
   abstract userId: string;
   abstract instructorId: string;
 }

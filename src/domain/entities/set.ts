@@ -2,6 +2,7 @@ import { History } from './history';
 export class Set {
   id: string;
   reps: number;
+  series: number;
   weight?: number;
   type: Type;
   day: Day;

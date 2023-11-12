@@ -12,6 +12,8 @@ export abstract class CreateSetInputContract implements CreateSetInput {
   @IsNotEmpty()
   reps: number;
   @IsNotEmpty()
+  series: number;
+  @IsNotEmpty()
   type: Type;
   @IsNotEmpty()
   userId: string;
@@ -32,6 +34,8 @@ export abstract class UpdateSetInputContract implements UpdateSetInput {
   reps?: number;
   @IsOptional()
   type?: Type;
+  @IsOptional()
+  series?: number;
   @IsOptional()
   weight?: number;
   @IsOptional()

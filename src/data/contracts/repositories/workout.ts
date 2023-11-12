@@ -24,6 +24,7 @@ export abstract class CreateWorkoutInputRepoContract
   id: string;
   @IsNotEmpty()
   name: string;
+
   @IsNotEmpty()
   active: boolean;
   @IsNotEmpty()

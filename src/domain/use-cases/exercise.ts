@@ -5,6 +5,7 @@ export abstract class ExerciseUseCases {
   abstract getById(input: string): Promise<Exercise>;
   abstract delete(input: string): Promise<Exercise>;
   abstract update(input: UpdateExerciseInput): Promise<Exercise>;
+  abstract getAll(): Promise<Exercise[]>;
 }
 
 export abstract class CreateExerciseInput {

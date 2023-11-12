@@ -12,8 +12,27 @@ import { PrismaDB } from 'src/infra/data-sources/prisma';
 export class PrismaSetRepository implements SetRepository {
   constructor(private readonly db: PrismaDB) {}
   async create(input: CreateSetInputRepoContract): Promise<SetContract> {
+    const user = await this.db.user.findUnique({
+      where: {
+        hash: Number(input.userId),
+      },
+    });
+
+    if (!user) throw new Error('User not found');
+
     const db = await this.db.set.create({
-      data: input,
+      data: {
+        id: input.id,
+        day: input.day,
+        reps: input.reps,
+        series: input.series,
+        weight: input.weight,
+        exerciseId: input.exerciseId,
+        workoutId: input.workoutId,
+        userId: user.id,
+        type: input.type,
+        machineId: input.machineId,
+      },
       include: {
         history: true,
         exercise: true,

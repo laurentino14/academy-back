@@ -15,32 +15,51 @@ export class PrismaWorkoutRepository implements WorkoutRepository {
   async create(
     input: CreateWorkoutInputRepoContract,
   ): Promise<WorkoutContract> {
-    const sets = input.sets.map((set) => ({
-      ...set,
-    }));
-    const db = await this.db.workout.create({
-      data: {
-        id: input.id,
-        active: input.active,
-        name: input.name,
-        instructor: {
-          connect: { id: input.instructorId },
-        },
-        sets: {
-          createMany: {
-            data: sets,
-          },
-        },
-        user: {
-          connect: { id: input.userId },
-        },
-      },
-      include: {
-        sets: true,
-        instructor: true,
-        user: true,
+    const find = await this.db.user.findUnique({
+      where: {
+        hash: Number(input.userId),
       },
     });
+
+    if (!find) throw new Error('User not found');
+    const userId = find.id;
+
+    const db = await this.db.workout
+      .create({
+        data: {
+          id: input.id,
+          active: input.active,
+          name: input.name,
+          instructor: {
+            connect: { id: input.instructorId },
+          },
+          sets: {
+            createMany: {
+              data: input.sets.map((set) => {
+                return {
+                  ...set,
+                  userId,
+                  createdAt: new Date(),
+                  updatedAt: new Date(),
+                  workoutId: undefined,
+                };
+              }),
+            },
+          },
+          user: {
+            connect: { id: userId },
+          },
+        },
+        include: {
+          sets: true,
+          instructor: true,
+          user: true,
+        },
+      })
+      .then((res) => {
+        console.log(res);
+        return res;
+      });
 
     return db;
   }

@@ -11,6 +11,7 @@ export abstract class SetUseCases {
 export abstract class CreateSetInput {
   abstract reps: number;
   abstract weight?: number;
+  abstract series: number;
   abstract userId: string;
   abstract type: Type;
   abstract day: Day;
@@ -22,6 +23,7 @@ export abstract class CreateSetInput {
 export abstract class UpdateSetInput {
   abstract id: string;
   abstract reps?: number;
+  abstract series?: number;
   abstract weight?: number;
   abstract type?: Type;
   abstract machineId?: string;

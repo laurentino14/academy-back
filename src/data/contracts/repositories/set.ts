@@ -21,7 +21,9 @@ export abstract class CreateSetInputRepoContract implements CreateSetInput {
   @IsNotEmpty()
   abstract reps: number;
   @IsNotEmpty()
-  type: TypeContract;
+  abstract series: number;
+  @IsNotEmpty()
+  abstract type: TypeContract;
   @IsNotEmpty()
   abstract userId: string;
   @IsOptional()

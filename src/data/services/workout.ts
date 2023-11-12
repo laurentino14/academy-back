@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import { ObjectId } from 'bson';
-import { Workout } from 'src/domain/entities/workout';
 import {
   UpdateWorkoutInput,
   WorkoutUseCases,
@@ -19,7 +18,21 @@ export class WorkoutService implements WorkoutUseCases {
       active: input.active,
       instructorId: input.instructorId,
       name: input.name,
-      sets: input.sets,
+      sets: input.sets.map((set) => {
+        return {
+          id: new ObjectId().toString(),
+          reps: Number(set.reps),
+          weight: set.weight,
+          createdAt: new Date(),
+          day: set.day,
+          exerciseId: set.exerciseId,
+          machineId: set.machineId,
+          series: set.series,
+          type: set.type,
+          updatedAt: new Date(),
+          userId: set.userId,
+        };
+      }),
       userId: input.userId,
       id: new ObjectId().toString(),
     });

@@ -81,6 +81,7 @@ model Machine {
 model Set {
   id         String    @id @map("_id")
   reps       Int
+  series     Int
   weight     Int?
   day        Day
   type       Type

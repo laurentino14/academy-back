@@ -1,3 +1,4 @@
+import { Injectable } from '@nestjs/common';
 import { ObjectId } from 'bson';
 import {
   CreateExerciseInput,
@@ -6,7 +7,6 @@ import {
 } from 'src/domain/use-cases/exercise';
 import { ExerciseContract } from '../contracts/domain/exercise';
 import { ExerciseRepository } from '../contracts/repositories/exercise';
-import { Injectable } from '@nestjs/common';
 
 @Injectable()
 export class ExerciseService implements ExerciseUseCases {
@@ -27,5 +27,8 @@ export class ExerciseService implements ExerciseUseCases {
   }
   async update(input: UpdateExerciseInput): Promise<ExerciseContract> {
     return await this.repo.update(input);
+  }
+  async getAll(): Promise<ExerciseContract[]> {
+    return await this.repo.getAll();
   }
 }

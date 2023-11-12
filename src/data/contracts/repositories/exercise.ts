@@ -14,6 +14,7 @@ export abstract class ExerciseRepository {
   abstract update(
     input: UpdateExerciseInputContract,
   ): Promise<ExerciseContract>;
+  abstract getAll(): Promise<ExerciseContract[]>;
 }
 
 export abstract class CreateExerciseInputRepoContract

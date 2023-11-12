@@ -1,4 +1,5 @@
 import { IsNotEmpty, IsOptional } from 'class-validator';
+import { Day, Type } from 'src/domain/entities/set';
 import { Workout } from 'src/domain/entities/workout';
 import {
   CreateWorkoutInput,
@@ -13,12 +14,25 @@ export abstract class CreateWorkoutInputContract implements CreateWorkoutInput {
   name: string;
   @IsNotEmpty()
   active: boolean;
+
   @IsNotEmpty()
-  sets: SetContract[];
+  sets: SetWorkoutModel[];
   @IsNotEmpty()
   userId: string;
   @IsNotEmpty()
   instructorId: string;
+}
+
+export abstract class SetWorkoutModel {
+  reps: number;
+  series: number;
+  weight?: number;
+  type: Type;
+  day: Day;
+  userId: string;
+  machineId: string;
+  exerciseId: string;
+  workoutId?: string;
 }
 
 export abstract class UpdateWorkoutInputContract implements UpdateWorkoutInput {
@@ -26,6 +40,7 @@ export abstract class UpdateWorkoutInputContract implements UpdateWorkoutInput {
   id: string;
   @IsOptional()
   active?: boolean;
+
   @IsOptional()
   name?: string;
   @IsOptional()

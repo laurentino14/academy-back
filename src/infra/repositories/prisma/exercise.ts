@@ -72,4 +72,16 @@ export class PrismaExerciseRepository implements ExerciseRepository {
 
     return db;
   }
+
+  async getAll(): Promise<ExerciseContract[]> {
+    const db = await this.db.exercise.findMany({
+      include: {
+        sets: true,
+      },
+    });
+
+    if (!db) throw new Error('Error on get all exercises');
+
+    return db;
+  }
 }

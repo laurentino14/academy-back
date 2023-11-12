@@ -94,4 +94,20 @@ export class ExerciseController {
       };
     }
   }
+
+  @Get()
+  async getAll(): Promise<HttpResponse<ExerciseContract[]>> {
+    try {
+      const handle = await this.service.getAll();
+      return {
+        statusCode: 200,
+        data: handle,
+      };
+    } catch (err) {
+      return {
+        statusCode: 500,
+        data: err,
+      };
+    }
+  }
 }
