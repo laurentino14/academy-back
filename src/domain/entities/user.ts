@@ -1,4 +1,5 @@
 import { History } from './history';
+import { Set } from './set';
 import { Workout } from './workout';
 
 export class User {
@@ -11,6 +12,7 @@ export class User {
   email: string;
   birthdate: string;
   password: string;
+  sets: Set[];
   createdAt: Date | string;
   updatedAt: Date | string;
   workouts?: Workout[];

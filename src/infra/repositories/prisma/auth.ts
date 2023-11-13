@@ -72,6 +72,7 @@ export class PrismaAuthRepository implements AuthRepository {
       where: {
         id: input,
       },
+
       include: {
         instructorWorkouts: true,
         workouts: true,
@@ -79,6 +80,7 @@ export class PrismaAuthRepository implements AuthRepository {
         sets: true,
       },
     });
+    console.log(user);
 
     if (!user) throw new Error('User not found');
 

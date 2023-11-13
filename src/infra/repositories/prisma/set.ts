@@ -65,7 +65,10 @@ export class PrismaSetRepository implements SetRepository {
   async getAllByUserID(input: string): Promise<SetContract[]> {
     const db = await this.db.set.findMany({
       where: {
-        userId: input,
+        user: { id: input },
+        AND: {
+          userId: input,
+        },
       },
       include: {
         exercise: true,
@@ -77,7 +80,7 @@ export class PrismaSetRepository implements SetRepository {
 
     if (!db) throw new Error('Error on get set by user id');
 
-    return db;
+    return db.filter((set) => set.userId === input);
   }
   async delete(input: string): Promise<SetContract> {
     const db = await this.db.set.delete({

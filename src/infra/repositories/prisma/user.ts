@@ -35,6 +35,12 @@ export class PrismaUserRepository implements UserRepository {
         password: input.password,
         updatedAt: new Date(),
       },
+      include: {
+        history: true,
+        instructorWorkouts: true,
+        sets: true,
+        workouts: true,
+      },
     });
 
     if (!db) throw new Error('Error on update password');

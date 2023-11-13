@@ -87,7 +87,7 @@ export class PrismaWorkoutRepository implements WorkoutRepository {
       include: {
         instructor: true,
         user: true,
-        sets: true,
+        sets: { include: { exercise: true } },
       },
     });
 
