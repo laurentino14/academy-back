@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Headers, Post } from '@nestjs/common';
+import { Body, Controller, Get, Headers, Param, Post } from '@nestjs/common';
 import {
   AuthContract,
   SignInInputContract,
@@ -15,7 +15,6 @@ export class AuthController {
     @Body() input: SignInInputContract,
   ): Promise<HttpResponse<AuthContract>> {
     try {
-      console.log(input);
       const auth = await this.service.signIn(input);
       return {
         statusCode: 200,
@@ -34,15 +33,12 @@ export class AuthController {
     @Body() input: CreateUserInputContract,
   ): Promise<HttpResponse<AuthContract>> {
     try {
-      console.log(input);
       const auth = await this.service.signUp(input);
-      console.log(auth);
       return {
         statusCode: 200,
         data: auth,
       };
     } catch (err) {
-      console.log(err);
       return {
         statusCode: 400,
         data: err,
@@ -67,5 +63,30 @@ export class AuthController {
         data: err,
       };
     }
+  }
+
+  @Post('recovery')
+  async recoveryPassword(
+    @Body() input: { email: string; password: string; confirmPassword: string },
+  ): Promise<HttpResponse<boolean>> {
+    try {
+      const data = await this.service.recoveryPassword(input);
+      return {
+        statusCode: 200,
+        data: data,
+      };
+    } catch (err) {
+      console.error(err);
+      return {
+        statusCode: 400,
+        data: err,
+      };
+    }
+  }
+
+  @Get('recovery/:email')
+  async recoveryCode(@Param('email') input: string): Promise<number> {
+    const code = await this.service.recoveryCode(input);
+    return code;
   }
 }

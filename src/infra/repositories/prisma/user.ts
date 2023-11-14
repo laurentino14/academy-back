@@ -100,6 +100,18 @@ export class PrismaUserRepository implements UserRepository {
     return db;
   }
 
+  async getAll(): Promise<UserContract[]> {
+    const db = await this.prisma.user.findMany({
+      include: {
+        history: true,
+        instructorWorkouts: true,
+        sets: true,
+        workouts: true,
+      },
+    });
+    return db;
+  }
+
   async update(input: UpdateUserInputContract): Promise<UserContract> {
     const find = await this.prisma.user.findUnique({
       where: {
@@ -131,6 +143,47 @@ export class PrismaUserRepository implements UserRepository {
       },
     });
 
+    if (!db) throw new Error('User not found');
+    return db;
+  }
+  async delete(input: string): Promise<UserContract> {
+    const db = await this.prisma.user.update({
+      where: {
+        id: input,
+      },
+      data: {
+        deletedAt: new Date(),
+      },
+      include: {
+        history: true,
+        instructorWorkouts: true,
+        sets: true,
+        workouts: true,
+      },
+    });
+
+    console.error(db);
+
+    if (!db) throw new Error('User not found');
+
+    return db;
+  }
+
+  async toInstructor(input: string): Promise<UserContract> {
+    const db = await this.prisma.user.update({
+      where: {
+        hash: Number(input),
+      },
+      data: {
+        role: 'INSTRUCTOR',
+      },
+      include: {
+        history: true,
+        instructorWorkouts: true,
+        sets: true,
+        workouts: true,
+      },
+    });
     if (!db) throw new Error('User not found');
     return db;
   }

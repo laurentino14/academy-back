@@ -37,7 +37,12 @@ export class PrismaMachineRepository implements MachineRepository {
     return db;
   }
   async delete(id: string): Promise<MachineContract> {
-    const db = await this.db.machine.delete({ where: { id } });
+    const db = await this.db.machine.update({
+      where: { id },
+      data: {
+        deletedAt: new Date(),
+      },
+    });
 
     if (!db) throw new Error('Machine not deleted');
 

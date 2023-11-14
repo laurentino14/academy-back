@@ -4,8 +4,11 @@ export abstract class UserUseCases {
   abstract create(input: CreateUserInput): Promise<User>;
   abstract getById(input: string): Promise<User>;
   abstract getByEmail(input: string): Promise<User>;
+  abstract getAll(): Promise<User[]>;
   abstract update(input: UpdateUserInput): Promise<User>;
   abstract updatePassword(input: UpdatePasswordInput): Promise<User>;
+  abstract toInstructor(input: string): Promise<User>;
+  abstract delete(input: string): Promise<User>;
 }
 
 export abstract class CreateUserInput {

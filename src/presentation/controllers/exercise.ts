@@ -82,12 +82,13 @@ export class ExerciseController {
     @Body() input: UpdateExerciseInput,
   ): Promise<HttpResponse<ExerciseContract>> {
     try {
-      const handle = await this.service.update(input);
+      const handle = await this.service.update({ ...input, id: input.id[0] });
       return {
         statusCode: 200,
         data: handle,
       };
     } catch (err) {
+      console.error(err);
       return {
         statusCode: 500,
         data: err,

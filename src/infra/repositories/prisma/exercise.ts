@@ -41,9 +41,12 @@ export class PrismaExerciseRepository implements ExerciseRepository {
     return db;
   }
   async delete(input: string): Promise<ExerciseContract> {
-    const db = await this.db.exercise.delete({
+    const db = await this.db.exercise.update({
       where: {
         id: input,
+      },
+      data: {
+        deletedAt: new Date(),
       },
       include: {
         sets: true,

@@ -88,7 +88,7 @@ export class MachineController {
     }
   }
   @Delete(':id')
-  async delete(@Param() input: string): Promise<HttpResponse<Machine>> {
+  async delete(@Param('id') input: string): Promise<HttpResponse<Machine>> {
     try {
       const machine = await this.service.delete(input);
       return {

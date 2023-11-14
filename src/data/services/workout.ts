@@ -38,7 +38,7 @@ export class WorkoutService implements WorkoutUseCases {
     });
   }
   async getById(input: string): Promise<WorkoutContract> {
-    return await this.getById(input);
+    return await this.repo.getById(input);
   }
   async getByUserId(input: string): Promise<WorkoutContract[]> {
     return await this.repo.getByUserId(input);

@@ -80,10 +80,27 @@ export class PrismaAuthRepository implements AuthRepository {
         sets: true,
       },
     });
-    console.log(user);
 
     if (!user) throw new Error('User not found');
 
     return user;
+  }
+
+  async recoveryPassword(input: {
+    email: string;
+    password: string;
+  }): Promise<boolean> {
+    const db = await this.prisma.user.update({
+      where: {
+        email: input.email,
+      },
+      data: {
+        password: input.password,
+      },
+    });
+
+    if (!db) throw new Error('Error on update password');
+
+    return true;
   }
 }

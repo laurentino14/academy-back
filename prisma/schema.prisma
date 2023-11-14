@@ -49,6 +49,7 @@ model User {
   password           String
   createdAt          DateTime  @default(now())
   updatedAt          DateTime  @updatedAt
+  deletedAt          DateTime?
   workouts           Workout[] @relation(name: "user")
   instructorWorkouts Workout[] @relation(name: "instructor")
   history            History[] @relation(name: "history")
@@ -58,21 +59,23 @@ model User {
 }
 
 model Exercise {
-  id          String   @id @map("_id")
+  id          String    @id @map("_id")
   name        String
   description String?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  deletedAt   DateTime?
   sets        Set[]
 
   @@map("exercises")
 }
 
 model Machine {
-  id        String   @id @map("_id")
+  id        String    @id @map("_id")
   name      String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
   sets      Set[]
 
   @@map("machines")

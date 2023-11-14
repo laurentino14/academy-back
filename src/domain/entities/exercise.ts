@@ -6,5 +6,6 @@ export class Exercise {
   description?: string;
   createdAt: Date | string;
   updatedAt: Date | string;
+  deletedAt?: Date | undefined | null;
   sets: Set[];
 }

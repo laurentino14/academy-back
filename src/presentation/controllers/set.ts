@@ -68,7 +68,6 @@ export class SetController {
         data: handle,
       };
     } catch (err) {
-      console.log(err);
       return {
         statusCode: 500,
         data: err,

@@ -5,6 +5,12 @@ export abstract class AuthUseCases {
   abstract signIn(input: SignInInput): Promise<Auth>;
   abstract refresh(input: string): Promise<Auth>;
   abstract signUp(input: SignUpInput): Promise<Auth>;
+  abstract recoveryPassword(input: {
+    email: string;
+    password: string;
+    confirmPassword: string;
+  }): Promise<boolean>;
+  abstract recoveryCode(input: string): Promise<number>;
 }
 
 export abstract class SignInInput {

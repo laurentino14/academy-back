@@ -2,10 +2,12 @@ import { Injectable } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import { ObjectId } from 'bson';
 import { User } from 'src/domain/entities/user';
-import { UpdateUserInput, UserUseCases } from 'src/domain/use-cases/user';
+import { UserUseCases } from 'src/domain/use-cases/user';
 import {
   CreateUserInputContract,
+  UpdateUserInputContract,
   UpdateUserPasswordContract,
+  UserContract,
 } from '../contracts/domain/user';
 import { UserRepository } from '../contracts/repositories/user';
 import { verifyCPF } from '../utils/verifyCPF';
@@ -27,7 +29,7 @@ export class UserService implements UserUseCases {
       oldPassword: input.oldPassword,
     });
   }
-  async create(input: CreateUserInputContract): Promise<User> {
+  async create(input: CreateUserInputContract): Promise<UserContract> {
     const password = await bcrypt.hash(input.password, 10);
     if (!verifyCPF(input.doc)) throw new Error('CPF inválido');
     const user = new User({
@@ -41,13 +43,25 @@ export class UserService implements UserUseCases {
 
     return await this.repo.create(user);
   }
-  async getById(input: string): Promise<User> {
+  async getById(input: string): Promise<UserContract> {
     return await this.repo.getById(input);
   }
-  async getByEmail(input: string): Promise<User> {
+  async getByEmail(input: string): Promise<UserContract> {
     return await this.repo.getByEmail(input);
   }
-  async update(input: UpdateUserInput): Promise<User> {
+  async getAll(): Promise<UserContract[]> {
+    return await this.repo.getAll();
+  }
+
+  async update(input: UpdateUserInputContract): Promise<UserContract> {
     return await this.repo.update(input);
+  }
+
+  async delete(input: string): Promise<UserContract> {
+    return await this.repo.delete(input);
+  }
+
+  async toInstructor(input: string): Promise<User> {
+    return await this.repo.toInstructor(input);
   }
 }

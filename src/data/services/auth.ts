@@ -4,6 +4,7 @@ import * as bcrypt from 'bcrypt';
 import { ObjectId } from 'bson';
 import { User } from 'src/domain/entities/user';
 import { AuthUseCases } from 'src/domain/use-cases/auth';
+import { ResendProvider } from 'src/infra/providers/resend';
 import { AuthContract, SignInInputContract } from '../contracts/domain/auth';
 import { CreateUserInputContract } from '../contracts/domain/user';
 import { AuthRepository } from '../contracts/repositories/auth';
@@ -13,10 +14,10 @@ export class AuthService implements AuthUseCases {
   constructor(
     private readonly repo: AuthRepository,
     private jwt: JwtService,
+    private readonly resend: ResendProvider,
   ) {}
   async signIn(input: SignInInputContract): Promise<AuthContract> {
     const user = await this.repo.signIn(input);
-    console.log(user);
     return {
       user,
       accessToken: await this.generateAToken({ sub: user.id }),
@@ -46,7 +47,6 @@ export class AuthService implements AuthUseCases {
   }
 
   async refresh(input: string): Promise<AuthContract> {
-    console.log(input);
     await this.verifyRToken(input);
     const id = await this.decode(input).sub;
     const user = await this.repo.refresh(id);
@@ -55,6 +55,36 @@ export class AuthService implements AuthUseCases {
       accessToken: await this.generateAToken({ sub: user.id }),
       refreshToken: await this.generateRToken({ sub: user.id }),
     };
+  }
+
+  async recoveryPassword(input: {
+    email: string;
+    password: string;
+    confirmPassword: string;
+  }): Promise<boolean> {
+    if (input.password !== input.confirmPassword)
+      throw new Error('Senhas não conferem');
+
+    const password = await bcrypt.hash(input.password, 10);
+    const recoveryPass = await this.repo.recoveryPassword({
+      email: input.email,
+      password,
+    });
+
+    if (!recoveryPass) throw new Error('Erro ao atualizar senha');
+
+    return true;
+  }
+
+  async recoveryCode(input: string): Promise<number> {
+    const code =
+      Math.floor(Math.random() * 1000) * Math.floor(Math.random() * 1000);
+    await this.resend.sendEmail(
+      input,
+      'Código de Acesso',
+      `Seu código de confirmação e ${code}`,
+    );
+    return code;
   }
 
   async verifyAToken(input: string): Promise<void> {

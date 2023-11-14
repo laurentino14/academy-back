@@ -42,7 +42,7 @@ export class WorkoutController {
   @UseGuards(AuthGuard)
   @Get(':id')
   async getById(
-    @Param() input: string,
+    @Param('id') input: string,
   ): Promise<HttpResponse<WorkoutContract>> {
     try {
       const handle = await this.service.getById(input);

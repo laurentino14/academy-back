@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { ObjectId } from 'bson';
+import { SetContract } from 'src/data/contracts/domain/set';
 import { WorkoutContract } from 'src/data/contracts/domain/workout';
 import {
   CreateWorkoutInputRepoContract,
@@ -57,7 +58,6 @@ export class PrismaWorkoutRepository implements WorkoutRepository {
         },
       })
       .then((res) => {
-        console.log(res);
         return res;
       });
 
@@ -102,7 +102,7 @@ export class PrismaWorkoutRepository implements WorkoutRepository {
       },
       include: {
         instructor: true,
-        sets: true,
+        sets: { include: { exercise: true } },
         user: true,
       },
     });
@@ -128,30 +128,67 @@ export class PrismaWorkoutRepository implements WorkoutRepository {
     return db;
   }
   async update(input: UpdateWorkoutInput): Promise<WorkoutContract> {
-    const db = await this.db.workout.update({
-      where: {
-        id: input.id,
-      },
-      data: {
-        active: input.active,
-        name: input.name,
-        sets: {
-          createMany: {
-            data: input.sets.map((set) => ({
-              ...set,
-              id: new ObjectId().toString(),
-            })),
-          },
-        },
+    console.log(input, 'input');
+    const createFilter = input.sets.filter((set) => !set.id);
+    const create: SetContract[] = createFilter.map((set) => {
+      return {
+        id: new ObjectId().toString(),
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        day: set.day,
+        exerciseId: set.exerciseId,
+        machineId: set.machineId,
+        reps: set.reps,
+        series: set.series,
+        type: set.type,
         userId: input.userId,
-        instructorId: input.instructorId,
-      },
-      include: {
-        instructor: true,
-        sets: true,
-        user: true,
-      },
+        weight: set.weight,
+      };
     });
+
+    const up = input.sets
+      .filter((set) => set.id)
+      .map((set) => {
+        return {
+          where: { id: set.id },
+          data: {
+            reps: set.reps,
+            weight: set.weight,
+            userId: set.userId,
+            createdAt: set.createdAt,
+            updatedAt: set.updatedAt,
+            day: set.day,
+            machineId: set.machineId,
+            series: set.series,
+            type: set.type,
+          },
+        };
+      });
+    console.log(create);
+    console.log(up);
+
+    const db = await this.db.workout
+      .update({
+        where: {
+          id: input.id,
+        },
+        data: {
+          active: input.active,
+          name: input.name,
+          sets: {
+            update: up,
+            createMany: create.length > 0 ? { data: create } : undefined,
+          },
+          userId: input.userId,
+          instructorId: input.instructorId,
+        },
+        include: {
+          instructor: true,
+          sets: true,
+          user: true,
+        },
+      })
+      .catch((err) => console.log(err));
 
     if (!db) throw new Error('Error on update workout');
 
