@@ -68,9 +68,24 @@ export class PrismaWorkoutRepository implements WorkoutRepository {
       where: {
         id: input,
       },
-      include: {
+      select: {
+        createdAt: true,
+        active: true,
+        id: true,
+        instructorId: true,
         instructor: true,
-        sets: true,
+        name: true,
+        sets: {
+          include: {
+            exercise: true,
+            user: true,
+            machine: true,
+            history: true,
+            workout: true,
+          },
+        },
+        updatedAt: true,
+        userId: true,
         user: true,
       },
     });
@@ -128,7 +143,6 @@ export class PrismaWorkoutRepository implements WorkoutRepository {
     return db;
   }
   async update(input: UpdateWorkoutInput): Promise<WorkoutContract> {
-    console.log(input, 'input');
     const createFilter = input.sets.filter((set) => !set.id);
     const create: SetContract[] = createFilter.map((set) => {
       return {
@@ -147,25 +161,28 @@ export class PrismaWorkoutRepository implements WorkoutRepository {
     });
 
     const up = input.sets
-      .filter((set) => set.id)
+      .filter((set) => set.id && !set.deletedAt)
       .map((set) => {
         return {
-          where: { id: set.id },
-          data: {
-            reps: set.reps,
-            weight: set.weight,
-            userId: set.userId,
-            createdAt: set.createdAt,
-            updatedAt: set.updatedAt,
-            day: set.day,
-            machineId: set.machineId,
-            series: set.series,
-            type: set.type,
-          },
+          id: set.id,
+          reps: set.reps,
+          weight: set.weight,
+          userId: set.userId,
+          createdAt: set.createdAt,
+          updatedAt: set.updatedAt,
+          day: set.day,
+          machineId: set.machineId,
+          exerciseId: set.exerciseId,
+          series: set.series,
+          type: set.type,
         };
       });
     console.log(create);
-    console.log(up);
+    console.log(up, 'up');
+
+    const deleted = input.sets.filter((set) => {
+      return set.deletedAt === 'deleted';
+    });
 
     const db = await this.db.workout
       .update({
@@ -176,8 +193,32 @@ export class PrismaWorkoutRepository implements WorkoutRepository {
           active: input.active,
           name: input.name,
           sets: {
-            update: up,
+            disconnect: deleted.map((set) => ({
+              id: set.id,
+            })),
             createMany: create.length > 0 ? { data: create } : undefined,
+            updateMany: [
+              ...up.map((set) => {
+                const newSet = {
+                  reps: set.reps,
+                  weight: set.weight,
+                  updatedAt: new Date(),
+                  day: set.day,
+                  machineId: set.machineId,
+                  exerciseId: set.exerciseId,
+                  series: set.series,
+                  type: set.type,
+                };
+                return {
+                  where: {
+                    id: set.id,
+                  },
+                  data: {
+                    ...newSet,
+                  },
+                };
+              }),
+            ],
           },
           userId: input.userId,
           instructorId: input.instructorId,

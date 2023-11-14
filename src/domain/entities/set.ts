@@ -12,6 +12,7 @@ export class Set {
   workoutId?: string;
   createdAt: Date | string;
   updatedAt: Date | string;
+  deletedAt?: Date | string | null | undefined;
   history?: History[];
 }
 export type Type = 'BACK' | 'CHEST' | 'LEGS' | 'SHOULDERS' | 'ARMS' | 'ABS';
