@@ -43,6 +43,8 @@ model User {
   doc                String    @unique
   hash               Int       @unique
   gender             String
+  weigth             Float?
+  height             Float?
   name               String
   email              String    @unique
   birthdate          String
@@ -105,10 +107,10 @@ model Set {
 }
 
 model History {
-  id    String @id @map("_id")
-  set   Set    @relation(fields: [setId], references: [id])
-  setId String
-
+  id        String   @id @map("_id")
+  set       Set      @relation(fields: [setId], references: [id])
+  setId     String
+  stars     Int?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   user      User     @relation(fields: [userId], references: [id], name: "history")

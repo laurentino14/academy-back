@@ -35,4 +35,8 @@ export class HistoryService implements HistoryUseCases {
   async delete(input: string): Promise<HistoryContract> {
     return await this.repo.delete(input);
   }
+
+  async changeStars(input: { id: string; stars: number }): Promise<boolean> {
+    return await this.repo.changeStars(input);
+  }
 }

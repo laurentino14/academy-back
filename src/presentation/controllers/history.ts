@@ -4,6 +4,7 @@ import {
   Delete,
   Get,
   Param,
+  Patch,
   Post,
   UseGuards,
 } from '@nestjs/common';
@@ -12,10 +13,7 @@ import {
   GetAllByDayInputContract,
   HistoryContract,
 } from 'src/data/contracts/domain/history';
-import {
-  CreateHistoryInput,
-  HistoryUseCases,
-} from 'src/domain/use-cases/history';
+import { HistoryUseCases } from 'src/domain/use-cases/history';
 import { HttpResponse } from '../contracts/http-reponse';
 import { AuthGuard } from '../guards/auth';
 
@@ -102,6 +100,19 @@ export class HistoryController {
         statusCode: 500,
         data: err.message,
       };
+    }
+  }
+
+  @Patch()
+  async changeStars(
+    @Body() input: { id: string; stars: number },
+  ): Promise<boolean> {
+    try {
+      const data = await this.service.changeStars(input);
+
+      return data;
+    } catch (err) {
+      return err.message;
     }
   }
 

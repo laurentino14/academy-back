@@ -124,10 +124,11 @@ export class PrismaUserRepository implements UserRepository {
     const compare = await bcrypt.compare(input.password, find.password);
 
     if (!compare) throw new Error('Password is incorrect');
-
     const data = {
       name: input.name,
       email: input.email,
+      weigth: input.weigth,
+      height: input.height,
       updatedAt: new Date(),
     };
     const db = await this.prisma.user.update({

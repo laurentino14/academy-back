@@ -9,6 +9,8 @@ export class User {
   hash: number;
   gender: string;
   name: string;
+  weigth?: number | null | undefined;
+  height?: number | null | undefined;
   email: string;
   birthdate: string;
   password: string;

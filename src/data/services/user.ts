@@ -54,6 +54,8 @@ export class UserService implements UserUseCases {
   }
 
   async update(input: UpdateUserInputContract): Promise<UserContract> {
+    input.height = Number(input.height);
+    input.weigth = Number(input.weigth);
     return await this.repo.update(input);
   }
 

@@ -68,4 +68,19 @@ export class PrismaHistoryRepository implements HistoryRepository {
 
     return db;
   }
+
+  async changeStars(input: { id: string; stars: number }): Promise<boolean> {
+    const db = await this.db.history.update({
+      where: {
+        id: input.id,
+      },
+      data: {
+        stars: input.stars,
+      },
+    });
+
+    if (!db) throw new Error('Error on change stars');
+
+    return true;
+  }
 }

@@ -45,7 +45,10 @@ export abstract class UpdateUserInputContract implements UpdateUserInput {
   name?: string;
   @IsOptional()
   email?: string;
-
+  @IsOptional()
+  weigth?: number | null | undefined;
+  @IsOptional()
+  height?: number | null | undefined;
   @IsNotEmpty()
   password: string;
 }

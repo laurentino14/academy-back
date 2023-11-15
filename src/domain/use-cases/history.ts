@@ -5,6 +5,7 @@ export abstract class HistoryUseCases {
   abstract getById(input: string): Promise<History>;
   abstract getAllByUserID(input: string): Promise<History[]>;
   abstract getAllByUserIDAndDate(input: GetAllByDayInput): Promise<History[]>;
+  abstract changeStars(input: { stars: number; id: string }): Promise<boolean>;
   abstract delete(input: string): Promise<History>;
 }
 

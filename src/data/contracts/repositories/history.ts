@@ -9,6 +9,7 @@ export abstract class HistoryRepository {
     input: GetAllByDayInputRepo,
   ): Promise<HistoryContract[]>;
   abstract delete(input: string): Promise<HistoryContract>;
+  abstract changeStars(input: { id: string; stars: number }): Promise<boolean>;
 }
 
 export abstract class CreateHistoryInputRepo {

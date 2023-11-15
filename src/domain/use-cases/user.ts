@@ -30,6 +30,8 @@ export abstract class UpdatePasswordInput {
 
 export abstract class UpdateUserInput {
   abstract id: string;
+  abstract weigth?: number | null | undefined;
+  abstract height?: number | null | undefined;
   abstract name?: string;
   abstract email?: string;
   abstract password: string;
