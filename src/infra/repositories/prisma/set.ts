@@ -78,6 +78,8 @@ export class PrismaSetRepository implements SetRepository {
       },
     });
 
+    console.log(db);
+
     if (!db) throw new Error('Error on get set by user id');
 
     return db.filter((set) => set.userId === input);

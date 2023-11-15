@@ -52,4 +52,11 @@ export class WorkoutService implements WorkoutUseCases {
   async update(input: UpdateWorkoutInput): Promise<WorkoutContract> {
     return await this.repo.update(input);
   }
+
+  async turnActive(input: {
+    userId: string;
+    workoutId: string;
+  }): Promise<boolean> {
+    return await this.repo.turnActive(input);
+  }
 }

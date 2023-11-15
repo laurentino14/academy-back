@@ -76,6 +76,7 @@ export class PrismaHistoryRepository implements HistoryRepository {
       },
       data: {
         stars: input.stars,
+        updatedAt: new Date(),
       },
     });
 

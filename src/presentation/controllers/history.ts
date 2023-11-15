@@ -117,7 +117,9 @@ export class HistoryController {
   }
 
   @Delete(':id')
-  async delete(@Param() input: string): Promise<HttpResponse<HistoryContract>> {
+  async delete(
+    @Param('id') input: string,
+  ): Promise<HttpResponse<HistoryContract>> {
     try {
       const data = await this.service.delete(input);
 

@@ -15,6 +15,10 @@ export abstract class WorkoutRepository {
   abstract getByInstructorId(input: string): Promise<WorkoutContract[]>;
   abstract delete(input: string): Promise<WorkoutContract>;
   abstract update(input: UpdateWorkoutInput): Promise<WorkoutContract>;
+  abstract turnActive(input: {
+    userId: string;
+    workoutId: string;
+  }): Promise<boolean>;
 }
 
 export abstract class CreateWorkoutInputRepoContract

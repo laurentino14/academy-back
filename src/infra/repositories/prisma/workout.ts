@@ -25,6 +25,16 @@ export class PrismaWorkoutRepository implements WorkoutRepository {
     if (!find) throw new Error('User not found');
     const userId = find.id;
 
+    await this.db.workout.updateMany({
+      where: {
+        userId: userId,
+        active: true,
+      },
+      data: {
+        active: false,
+      },
+    });
+
     const db = await this.db.workout
       .create({
         data: {
@@ -234,5 +244,31 @@ export class PrismaWorkoutRepository implements WorkoutRepository {
     if (!db) throw new Error('Error on update workout');
 
     return db;
+  }
+
+  async turnActive(input: {
+    userId: string;
+    workoutId: string;
+  }): Promise<boolean> {
+    await this.db.workout.updateMany({
+      where: {
+        userId: input.userId,
+        active: true,
+      },
+      data: {
+        active: false,
+      },
+    });
+    const db = await this.db.workout.update({
+      where: {
+        id: input.workoutId,
+      },
+      data: {
+        active: true,
+      },
+    });
+    if (!db) throw new Error('Error on turn active workout');
+
+    return true;
   }
 }

@@ -9,6 +9,10 @@ export abstract class WorkoutUseCases {
   abstract getByInstructorId(input: string): Promise<Workout[]>;
   abstract delete(input: string): Promise<Workout>;
   abstract update(input: UpdateWorkoutInput): Promise<Workout>;
+  abstract turnActive(input: {
+    userId: string;
+    workoutId: string;
+  }): Promise<boolean>;
 }
 
 export abstract class CreateWorkoutInput {

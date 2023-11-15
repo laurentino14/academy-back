@@ -1,4 +1,5 @@
 import { History } from './history';
+import { Workout } from './workout';
 export class Set {
   id: string;
   reps: number;
@@ -9,6 +10,7 @@ export class Set {
   userId: string;
   machineId: string;
   exerciseId: string;
+  workout?: Workout;
   workoutId?: string;
   createdAt: Date | string;
   updatedAt: Date | string;

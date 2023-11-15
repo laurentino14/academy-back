@@ -129,4 +129,23 @@ export class WorkoutController {
       };
     }
   }
+
+  @UseGuards(AuthGuard)
+  @Post('active')
+  async turnActive(
+    @Body() input: { userId: string; workoutId: string },
+  ): Promise<HttpResponse<boolean>> {
+    try {
+      const handle = await this.service.turnActive(input);
+      return {
+        statusCode: 200,
+        data: handle,
+      };
+    } catch (err) {
+      return {
+        statusCode: 500,
+        data: err,
+      };
+    }
+  }
 }
