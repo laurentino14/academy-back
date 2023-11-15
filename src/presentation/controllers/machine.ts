@@ -60,7 +60,7 @@ export class MachineController {
     try {
       const machine = await this.service.create(input);
       return {
-        statusCode: 200,
+        statusCode: 201,
         data: machine,
       };
     } catch (err) {
