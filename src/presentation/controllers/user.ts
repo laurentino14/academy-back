@@ -162,4 +162,22 @@ export class UserController {
       };
     }
   }
+
+  @Patch('toUser/:id')
+  async toUser(
+    @Param('id') input: string,
+  ): Promise<HttpResponse<UserContract>> {
+    try {
+      const data = await this.service.toUser(input);
+      return {
+        statusCode: 200,
+        data,
+      };
+    } catch (err) {
+      return {
+        statusCode: 500,
+        data: err,
+      };
+    }
+  }
 }

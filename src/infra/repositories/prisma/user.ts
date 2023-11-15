@@ -170,10 +170,10 @@ export class PrismaUserRepository implements UserRepository {
     return db;
   }
 
-  async toInstructor(input: string): Promise<UserContract> {
+  async toInstructor(input: number): Promise<UserContract> {
     const db = await this.prisma.user.update({
       where: {
-        hash: Number(input),
+        hash: input,
       },
       data: {
         role: 'INSTRUCTOR',
@@ -185,6 +185,27 @@ export class PrismaUserRepository implements UserRepository {
         workouts: true,
       },
     });
+    if (!db) throw new Error('User not found');
+    return db;
+  }
+
+  async toUser(input: string): Promise<UserContract> {
+    const db = await this.prisma.user
+      .update({
+        where: {
+          id: input,
+        },
+        data: {
+          role: 'USER',
+        },
+        include: {
+          history: true,
+          instructorWorkouts: true,
+          sets: true,
+          workouts: true,
+        },
+      })
+      .catch((err) => console.log(err));
     if (!db) throw new Error('User not found');
     return db;
   }

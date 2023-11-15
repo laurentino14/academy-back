@@ -8,7 +8,8 @@ export abstract class UserRepository {
   abstract getByEmail(input: string): Promise<UserContract>;
   abstract update(input: UpdateUserInputContract): Promise<UserContract>;
   abstract updatePassword(input: InputUpdatePassword): Promise<UserContract>;
-  abstract toInstructor(input: string): Promise<UserContract>;
+  abstract toInstructor(input: number): Promise<UserContract>;
+  abstract toUser(input: string): Promise<UserContract>;
   abstract getAll(): Promise<UserContract[]>;
   abstract delete(input: string): Promise<UserContract>;
 }

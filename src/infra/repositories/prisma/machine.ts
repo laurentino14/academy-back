@@ -30,7 +30,10 @@ export class PrismaMachineRepository implements MachineRepository {
     return db;
   }
   async update(data: UpdateMachineInput): Promise<MachineContract> {
-    const db = await this.db.machine.update({ where: { id: data.id }, data });
+    const db = await this.db.machine.update({
+      where: { id: data.id },
+      data: { name: data.name },
+    });
 
     if (!db) throw new Error('Machine not updated');
 
