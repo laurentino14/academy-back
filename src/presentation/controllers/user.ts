@@ -180,4 +180,22 @@ export class UserController {
       };
     }
   }
+
+  @Patch('toAdmin/:id')
+  async toAdmin(
+    @Param('id') input: string,
+  ): Promise<HttpResponse<UserContract>> {
+    try {
+      const data = await this.service.toAdmin(input);
+      return {
+        statusCode: 200,
+        data,
+      };
+    } catch (err) {
+      return {
+        statusCode: 500,
+        data: err,
+      };
+    }
+  }
 }

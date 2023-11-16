@@ -9,6 +9,7 @@ export abstract class UserUseCases {
   abstract updatePassword(input: UpdatePasswordInput): Promise<User>;
   abstract toInstructor(input: string): Promise<User>;
   abstract toUser(input: string): Promise<User>;
+  abstract toAdmin(input: string): Promise<User>;
   abstract delete(input: string): Promise<User>;
 }
 

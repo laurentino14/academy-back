@@ -209,4 +209,22 @@ export class PrismaUserRepository implements UserRepository {
     if (!db) throw new Error('User not found');
     return db;
   }
+  async toAdmin(input: string): Promise<UserContract> {
+    const db = await this.prisma.user.update({
+      where: {
+        hash: Number(input),
+      },
+      data: {
+        role: 'ADMIN',
+      },
+      include: {
+        history: true,
+        instructorWorkouts: true,
+        sets: true,
+        workouts: true,
+      },
+    });
+    if (!db) throw new Error('User not found');
+    return db;
+  }
 }

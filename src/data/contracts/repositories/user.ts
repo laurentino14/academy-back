@@ -10,6 +10,7 @@ export abstract class UserRepository {
   abstract updatePassword(input: InputUpdatePassword): Promise<UserContract>;
   abstract toInstructor(input: number): Promise<UserContract>;
   abstract toUser(input: string): Promise<UserContract>;
+  abstract toAdmin(input: string): Promise<UserContract>;
   abstract getAll(): Promise<UserContract[]>;
   abstract delete(input: string): Promise<UserContract>;
 }

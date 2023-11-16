@@ -69,4 +69,7 @@ export class UserService implements UserUseCases {
   async toUser(input: string): Promise<User> {
     return await this.repo.toUser(input);
   }
+  async toAdmin(input: string): Promise<User> {
+    return await this.repo.toAdmin(input);
+  }
 }
