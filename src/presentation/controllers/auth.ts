@@ -1,11 +1,19 @@
-import { Body, Controller, Get, Headers, Param, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Headers,
+  Param,
+  Post,
+  Res,
+} from '@nestjs/common';
+import { Response } from 'express';
 import {
   AuthContract,
   SignInInputContract,
 } from 'src/data/contracts/domain/auth';
 import { CreateUserInputContract } from 'src/data/contracts/domain/user';
 import { AuthUseCases } from 'src/domain/use-cases/auth';
-import { HttpResponse } from '../contracts/http-reponse';
 
 @Controller('auth')
 export class AuthController {
@@ -13,74 +21,70 @@ export class AuthController {
   @Post()
   async signIn(
     @Body() input: SignInInputContract,
-  ): Promise<HttpResponse<AuthContract>> {
+    @Res() res: Response,
+  ): Promise<Response<AuthContract>> {
     try {
       const auth = await this.service.signIn(input);
-      return {
-        statusCode: 200,
+      return res.status(200).json({
         data: auth,
-      };
+      });
     } catch (err) {
-      return {
-        statusCode: 400,
+      return res.status(401).json({
         data: err,
-      };
+      });
     }
   }
 
   @Post('signup')
   async signUp(
     @Body() input: CreateUserInputContract,
-  ): Promise<HttpResponse<AuthContract>> {
+    @Res() res: Response,
+  ): Promise<Response<AuthContract>> {
     try {
       const auth = await this.service.signUp(input);
-      return {
-        statusCode: 200,
+      return res.status(201).json({
         data: auth,
-      };
+      });
     } catch (err) {
-      return {
-        statusCode: 400,
+      return res.status(400).json({
         data: err,
-      };
+      });
     }
   }
 
   @Get()
   async refresh(
     @Headers('authorization') input: string,
-  ): Promise<HttpResponse<AuthContract>> {
+    @Res() res: Response,
+  ): Promise<Response<AuthContract>> {
     try {
       const token = input.split(' ')[1];
       const auth = await this.service.refresh(token);
-      return {
-        statusCode: 200,
+      return res.status(200).json({
         data: auth,
-      };
+      });
     } catch (err) {
-      return {
-        statusCode: 400,
+      return res.status(401).json({
         data: err,
-      };
+      });
     }
   }
 
   @Post('recovery')
   async recoveryPassword(
     @Body() input: { email: string; password: string; confirmPassword: string },
-  ): Promise<HttpResponse<boolean>> {
+    @Res() res: Response,
+  ): Promise<Response<boolean>> {
     try {
       const data = await this.service.recoveryPassword(input);
-      return {
-        statusCode: 200,
-        data: data,
-      };
+      return res.status(200).json({
+        data,
+      });
     } catch (err) {
       console.error(err);
-      return {
-        statusCode: 400,
+      return res.status(401).json({
         data: err,
-      };
+      });
     }
   }
 

@@ -6,8 +6,10 @@ import {
   Param,
   Patch,
   Post,
+  Res,
   UseGuards,
 } from '@nestjs/common';
+import { Response } from 'express';
 import {
   CreateExerciseInputContract,
   ExerciseContract,
@@ -16,7 +18,6 @@ import {
   ExerciseUseCases,
   UpdateExerciseInput,
 } from 'src/domain/use-cases/exercise';
-import { HttpResponse } from '../contracts/http-reponse';
 import { AuthGuard } from '../guards/auth';
 
 @Controller('exercise')
@@ -26,89 +27,82 @@ export class ExerciseController {
   @Post()
   async create(
     @Body() input: CreateExerciseInputContract,
-  ): Promise<HttpResponse<ExerciseContract>> {
+    @Res() res: Response,
+  ): Promise<Response<ExerciseContract>> {
     try {
       const handle = await this.service.create(input);
-      return {
-        statusCode: 201,
+      return res.status(201).json({
         data: handle,
-      };
+      });
     } catch (err) {
-      return {
-        statusCode: 500,
+      return res.status(400).json({
         data: err,
-      };
+      });
     }
   }
   @UseGuards(AuthGuard)
   @Get(':id')
   async getById(
     @Param('id') input: string,
-  ): Promise<HttpResponse<ExerciseContract>> {
+    @Res() res: Response,
+  ): Promise<Response<ExerciseContract>> {
     try {
       const handle = await this.service.getById(input);
-      return {
-        statusCode: 200,
+      return res.status(200).json({
         data: handle,
-      };
+      });
     } catch (err) {
-      return {
-        statusCode: 500,
+      return res.status(400).json({
         data: err,
-      };
+      });
     }
   }
   @UseGuards(AuthGuard)
   @Delete(':id')
   async delete(
     @Param('id') input: string,
-  ): Promise<HttpResponse<ExerciseContract>> {
+    @Res() res: Response,
+  ): Promise<Response<ExerciseContract>> {
     try {
       const handle = await this.service.delete(input);
-      return {
-        statusCode: 200,
+      return res.status(200).json({
         data: handle,
-      };
+      });
     } catch (err) {
-      return {
-        statusCode: 500,
+      return res.status(400).json({
         data: err,
-      };
+      });
     }
   }
   @UseGuards(AuthGuard)
   @Patch()
   async update(
     @Body() input: UpdateExerciseInput,
-  ): Promise<HttpResponse<ExerciseContract>> {
+    @Res() res: Response,
+  ): Promise<Response<ExerciseContract>> {
     try {
       const handle = await this.service.update({ ...input, id: input.id[0] });
-      return {
-        statusCode: 200,
+      return res.status(200).json({
         data: handle,
-      };
+      });
     } catch (err) {
-      console.error(err);
-      return {
-        statusCode: 500,
+      return res.status(400).json({
         data: err,
-      };
+      });
     }
   }
 
   @Get()
-  async getAll(): Promise<HttpResponse<ExerciseContract[]>> {
+  async getAll(@Res() res: Response): Promise<Response<ExerciseContract[]>> {
     try {
       const handle = await this.service.getAll();
-      return {
-        statusCode: 200,
+      return res.status(200).json({
         data: handle,
-      };
+      });
     } catch (err) {
-      return {
-        statusCode: 500,
+      return res.status(400).json({
         data: err,
-      };
+      });
     }
   }
 }

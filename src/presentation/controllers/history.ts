@@ -6,15 +6,16 @@ import {
   Param,
   Patch,
   Post,
+  Res,
   UseGuards,
 } from '@nestjs/common';
+import { Response } from 'express';
 import {
   CreateHistoryInputContract,
   GetAllByDayInputContract,
   HistoryContract,
 } from 'src/data/contracts/domain/history';
 import { HistoryUseCases } from 'src/domain/use-cases/history';
-import { HttpResponse } from '../contracts/http-reponse';
 import { AuthGuard } from '../guards/auth';
 
 @Controller('history')
@@ -24,57 +25,54 @@ export class HistoryController {
   @Post()
   async create(
     @Body() input: CreateHistoryInputContract,
-  ): Promise<HttpResponse<HistoryContract>> {
+    @Res() res: Response,
+  ): Promise<Response<HistoryContract>> {
     try {
       const data = await this.service.create(input);
 
-      return {
-        statusCode: 200,
+      return res.status(200).json({
         data,
-      };
+      });
     } catch (err) {
-      return {
-        statusCode: 500,
+      return res.status(400).json({
         data: err.message,
-      };
+      });
     }
   }
 
   @Get(':id')
   async getById(
     @Param('id') input: string,
-  ): Promise<HttpResponse<HistoryContract>> {
+    @Res() res: Response,
+  ): Promise<Response<HistoryContract>> {
     try {
       const data = await this.service.getById(input);
 
-      return {
-        statusCode: 200,
+      return res.status(200).json({
         data,
-      };
+      });
     } catch (err) {
-      return {
-        statusCode: 500,
+      return res.status(400).json({
         data: err.message,
-      };
+      });
     }
   }
 
   @Get('user/:id')
   async getAllByUserID(
     @Param() input: string,
-  ): Promise<HttpResponse<HistoryContract[]>> {
+    @Res() res: Response,
+  ): Promise<Response<HistoryContract[]>> {
     try {
       const data = await this.service.getAllByUserID(input);
 
-      return {
-        statusCode: 200,
+      return res.status(200).json({
         data,
-      };
+      });
     } catch (err) {
-      return {
-        statusCode: 500,
+      return res.status(400).json({
         data: err.message,
-      };
+      });
     }
   }
 
@@ -82,7 +80,8 @@ export class HistoryController {
   async getAllByUserIDAndDate(
     @Param('id') inputId: string,
     @Param('date') inputDate: string,
-  ): Promise<HttpResponse<HistoryContract[]>> {
+    @Res() res: Response,
+  ): Promise<Response<HistoryContract[]>> {
     try {
       const input: GetAllByDayInputContract = {
         date: inputDate,
@@ -91,21 +90,20 @@ export class HistoryController {
 
       const data = await this.service.getAllByUserIDAndDate(input);
 
-      return {
-        statusCode: 200,
+      return res.status(200).json({
         data,
-      };
+      });
     } catch (err) {
-      return {
-        statusCode: 500,
+      return res.status(400).json({
         data: err.message,
-      };
+      });
     }
   }
 
   @Patch()
   async changeStars(
     @Body() input: { id: string; stars: number },
+    @Res() res: Response,
   ): Promise<boolean> {
     try {
       const data = await this.service.changeStars(input);
@@ -119,19 +117,18 @@ export class HistoryController {
   @Delete(':id')
   async delete(
     @Param('id') input: string,
-  ): Promise<HttpResponse<HistoryContract>> {
+    @Res() res: Response,
+  ): Promise<Response<HistoryContract>> {
     try {
       const data = await this.service.delete(input);
 
-      return {
-        statusCode: 200,
+      return res.status(200).json({
         data,
-      };
+      });
     } catch (err) {
-      return {
-        statusCode: 500,
+      return res.status(400).json({
         data: err.message,
-      };
+      });
     }
   }
 }

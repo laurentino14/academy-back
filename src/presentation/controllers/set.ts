@@ -6,15 +6,16 @@ import {
   Param,
   Patch,
   Post,
+  Res,
   UseGuards,
 } from '@nestjs/common';
+import { Response } from 'express';
 import { SetContract } from 'src/data/contracts/domain/set';
 import {
   CreateSetInput,
   SetUseCases,
   UpdateSetInput,
 } from 'src/domain/use-cases/set';
-import { HttpResponse } from '../contracts/http-reponse';
 import { AuthGuard } from '../guards/auth';
 
 @Controller('set')
@@ -25,86 +26,83 @@ export class SetController {
   @Post()
   async create(
     @Body() input: CreateSetInput,
-  ): Promise<HttpResponse<SetContract>> {
+    @Res() res: Response,
+  ): Promise<Response<SetContract>> {
     try {
       const handle = await this.service.create(input);
-      return {
-        statusCode: 201,
+      return res.status(201).json({
         data: handle,
-      };
+      });
     } catch (err) {
-      return {
-        statusCode: 500,
+      return res.status(400).json({
         data: err,
-      };
+      });
     }
   }
   @Get(':id')
   async getById(
     @Param('id') input: string,
-  ): Promise<HttpResponse<SetContract>> {
+    @Res() res: Response,
+  ): Promise<Response<SetContract>> {
     try {
       const handle = await this.service.getById(input);
-      return {
-        statusCode: 200,
+      return res.status(200).json({
         data: handle,
-      };
+      });
     } catch (err) {
-      return {
-        statusCode: 500,
+      return res.status(400).json({
         data: err,
-      };
+      });
     }
   }
 
   @Get('user/:id')
   async getAllByUserID(
     @Param('id') input: string,
-  ): Promise<HttpResponse<SetContract[]>> {
+    @Res() res: Response,
+  ): Promise<Response<SetContract[]>> {
     try {
       const handle = await this.service.getAllByUserID(input);
-      return {
-        statusCode: 200,
+      return res.status(200).json({
         data: handle,
-      };
+      });
     } catch (err) {
-      return {
-        statusCode: 500,
+      return res.status(400).json({
         data: err,
-      };
+      });
     }
   }
 
   @Patch()
   async update(
     @Body() input: UpdateSetInput,
-  ): Promise<HttpResponse<SetContract>> {
+    @Res() res: Response,
+  ): Promise<Response<SetContract>> {
     try {
       const handle = await this.service.update(input);
-      return {
-        statusCode: 200,
+      return res.status(200).json({
         data: handle,
-      };
+      });
     } catch (err) {
-      return {
-        statusCode: 500,
+      return res.status(400).json({
         data: err,
-      };
+      });
     }
   }
   @Delete(':id')
-  async delete(@Param('id') input: string): Promise<HttpResponse<SetContract>> {
+  async delete(
+    @Param('id') input: string,
+    @Res() res: Response,
+  ): Promise<Response<SetContract>> {
     try {
       const handle = await this.service.delete(input);
-      return {
-        statusCode: 200,
+      return res.status(200).json({
         data: handle,
-      };
+      });
     } catch (err) {
-      return {
-        statusCode: 500,
+      return res.status(400).json({
         data: err,
-      };
+      });
     }
   }
 }

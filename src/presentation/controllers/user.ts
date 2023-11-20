@@ -6,8 +6,10 @@ import {
   Param,
   Patch,
   Post,
+  Res,
   UseGuards,
 } from '@nestjs/common';
+import { Response } from 'express';
 import {
   CreateUserInputContract,
   UpdateUserInputContract,
@@ -16,7 +18,6 @@ import {
 } from 'src/data/contracts/domain/user';
 import { User } from 'src/domain/entities/user';
 import { UserUseCases } from 'src/domain/use-cases/user';
-import { HttpResponse } from '../contracts/http-reponse';
 import { AuthGuard } from '../guards/auth';
 
 @Controller('user')
@@ -27,175 +28,168 @@ export class UserController {
   @Post()
   async create(
     @Body() input: CreateUserInputContract,
-  ): Promise<HttpResponse<User>> {
+    @Res() res: Response,
+  ): Promise<Response<User>> {
     try {
       const user = await this.service.create(input);
-      return {
-        statusCode: 201,
+      return res.status(201).json({
         data: user,
-      };
+      });
     } catch (err) {
-      return {
-        statusCode: 500,
+      return res.status(400).json({
         data: err,
-      };
+      });
     }
   }
 
   @Get(':id')
-  async getById(@Param('id') input: string): Promise<HttpResponse<User>> {
+  async getById(
+    @Param('id') input: string,
+    @Res() res: Response,
+  ): Promise<Response<User>> {
     try {
       const user = await this.service.getById(input);
-      return {
-        statusCode: 200,
+      return res.status(200).json({
         data: user,
-      };
+      });
     } catch (err) {
-      return {
-        statusCode: 500,
+      return res.status(400).json({
         data: err,
-      };
+      });
     }
   }
 
   @Get('email/:email')
-  async getByEmail(@Param('email') input: string): Promise<HttpResponse<User>> {
+  async getByEmail(
+    @Param('email') input: string,
+    @Res() res: Response,
+  ): Promise<Response<User>> {
     try {
       const user = await this.service.getByEmail(input);
-      return {
-        statusCode: 200,
+      return res.status(200).json({
         data: user,
-      };
+      });
     } catch (err) {
-      return {
-        statusCode: 500,
+      return res.status(400).json({
         data: err,
-      };
+      });
     }
   }
 
   @Get()
-  async getAll(): Promise<HttpResponse<UserContract[]>> {
+  async getAll(@Res() res: Response): Promise<Response<UserContract[]>> {
     try {
       const data = await this.service.getAll();
 
-      return {
-        statusCode: 200,
+      return res.status(200).json({
         data,
-      };
+      });
     } catch (err) {
-      return {
-        statusCode: 500,
+      return res.status(400).json({
         data: err,
-      };
+      });
     }
   }
 
   @Patch()
   async update(
     @Body() input: UpdateUserInputContract,
-  ): Promise<HttpResponse<User>> {
+    @Res() res: Response,
+  ): Promise<Response<User>> {
     try {
       const user = await this.service.update(input);
-      return {
-        statusCode: 200,
+      return res.status(200).json({
         data: user,
-      };
+      });
     } catch (err) {
-      return {
-        statusCode: 500,
+      return res.status(400).json({
         data: err,
-      };
+      });
     }
   }
 
   @Patch('password')
   async updatePassword(
     @Body() input: UpdateUserPasswordContract,
-  ): Promise<HttpResponse<UserContract>> {
+    @Res() res: Response,
+  ): Promise<Response<UserContract>> {
     try {
       const user = await this.service.updatePassword(input);
-      return {
-        statusCode: 200,
+      return res.status(200).json({
         data: user,
-      };
+      });
     } catch (err) {
-      return {
-        statusCode: 500,
+      return res.status(400).json({
         data: err,
-      };
+      });
     }
   }
 
   @Delete(':id')
   async delete(
     @Param('id') input: string,
-  ): Promise<HttpResponse<UserContract>> {
+    @Res() res: Response,
+  ): Promise<Response<UserContract>> {
     try {
       const data = await this.service.delete(input);
-      return {
-        statusCode: 200,
+      return res.status(200).json({
         data,
-      };
+      });
     } catch (err) {
-      return {
-        statusCode: 500,
+      return res.status(400).json({
         data: err,
-      };
+      });
     }
   }
 
   @Patch('toInstructor/:id')
   async toInstructor(
     @Param('id') input: string,
-  ): Promise<HttpResponse<UserContract>> {
+    @Res() res: Response,
+  ): Promise<Response<UserContract>> {
     try {
       const data = await this.service.toInstructor(input);
-      return {
-        statusCode: 200,
+      return res.status(200).json({
         data,
-      };
+      });
     } catch (err) {
-      return {
-        statusCode: 500,
+      return res.status(400).json({
         data: err,
-      };
+      });
     }
   }
 
   @Patch('toUser/:id')
   async toUser(
     @Param('id') input: string,
-  ): Promise<HttpResponse<UserContract>> {
+    @Res() res: Response,
+  ): Promise<Response<UserContract>> {
     try {
       const data = await this.service.toUser(input);
-      return {
-        statusCode: 200,
+      return res.status(200).json({
         data,
-      };
+      });
     } catch (err) {
-      return {
-        statusCode: 500,
+      return res.status(400).json({
         data: err,
-      };
+      });
     }
   }
 
   @Patch('toAdmin/:id')
   async toAdmin(
     @Param('id') input: string,
-  ): Promise<HttpResponse<UserContract>> {
+    @Res() res: Response,
+  ): Promise<Response<UserContract>> {
     try {
       const data = await this.service.toAdmin(input);
-      return {
-        statusCode: 200,
+      return res.status(200).json({
         data,
-      };
+      });
     } catch (err) {
-      return {
-        statusCode: 500,
+      return res.status(400).json({
         data: err,
-      };
+      });
     }
   }
 }

@@ -6,8 +6,10 @@ import {
   Param,
   Patch,
   Post,
+  Res,
   UseGuards,
 } from '@nestjs/common';
+import { Response } from 'express';
 import {
   CreateWorkoutInputContract,
   UpdateWorkoutInputContract,
@@ -15,7 +17,6 @@ import {
 } from 'src/data/contracts/domain/workout';
 import { Workout } from 'src/domain/entities/workout';
 import { WorkoutUseCases } from 'src/domain/use-cases/workout';
-import { HttpResponse } from '../contracts/http-reponse';
 import { AuthGuard } from '../guards/auth';
 
 @Controller('workout')
@@ -25,108 +26,102 @@ export class WorkoutController {
   @Post()
   async create(
     @Body() input: CreateWorkoutInputContract,
-  ): Promise<HttpResponse<WorkoutContract>> {
+    @Res() res: Response,
+  ): Promise<Response<WorkoutContract>> {
     try {
       const handle = await this.service.create(input);
-      return {
-        statusCode: 201,
+      return res.status(201).json({
         data: handle,
-      };
+      });
     } catch (err) {
-      return {
-        statusCode: 500,
+      return res.status(400).json({
         data: err,
-      };
+      });
     }
   }
   @UseGuards(AuthGuard)
   @Get(':id')
   async getById(
     @Param('id') input: string,
-  ): Promise<HttpResponse<WorkoutContract>> {
+    @Res() res: Response,
+  ): Promise<Response<WorkoutContract>> {
     try {
       const handle = await this.service.getById(input);
-      return {
-        statusCode: 200,
+      return res.status(200).json({
         data: handle,
-      };
+      });
     } catch (err) {
-      return {
-        statusCode: 500,
+      return res.status(400).json({
         data: err,
-      };
+      });
     }
   }
   @UseGuards(AuthGuard)
   @Get('user/:id')
   async getByUserId(
     @Param('id') input: string,
-  ): Promise<HttpResponse<Workout[]>> {
+    @Res() res: Response,
+  ): Promise<Response<Workout[]>> {
     try {
       const handle = await this.service.getByUserId(input);
-      return {
-        statusCode: 200,
+      return res.status(200).json({
         data: handle,
-      };
+      });
     } catch (err) {
-      return {
-        statusCode: 500,
+      return res.status(400).json({
         data: err,
-      };
+      });
     }
   }
   @UseGuards(AuthGuard)
   @Get('instructor/:id')
   async getByInstructorId(
     @Param('id') input: string,
-  ): Promise<HttpResponse<Workout[]>> {
+    @Res() res: Response,
+  ): Promise<Response<Workout[]>> {
     try {
       const handle = await this.service.getByInstructorId(input);
-      return {
-        statusCode: 200,
+      return res.status(200).json({
         data: handle,
-      };
+      });
     } catch (err) {
-      return {
-        statusCode: 500,
+      return res.status(400).json({
         data: err,
-      };
+      });
     }
   }
   @UseGuards(AuthGuard)
   @Delete(':id')
   async delete(
     @Param('id') input: string,
-  ): Promise<HttpResponse<WorkoutContract>> {
+    @Res() res: Response,
+  ): Promise<Response<WorkoutContract>> {
     try {
       const handle = await this.service.delete(input);
-      return {
-        statusCode: 200,
+      return res.status(200).json({
         data: handle,
-      };
+      });
     } catch (err) {
-      return {
-        statusCode: 500,
+      return res.status(400).json({
         data: err,
-      };
+      });
     }
   }
   @UseGuards(AuthGuard)
   @Patch()
   async update(
     @Body() input: UpdateWorkoutInputContract,
-  ): Promise<HttpResponse<WorkoutContract>> {
+    @Res() res: Response,
+  ): Promise<Response<WorkoutContract>> {
     try {
       const handle = await this.service.update(input);
-      return {
-        statusCode: 200,
+      return res.status(200).json({
         data: handle,
-      };
+      });
     } catch (err) {
-      return {
-        statusCode: 500,
+      return res.status(400).json({
         data: err,
-      };
+      });
     }
   }
 
@@ -134,18 +129,17 @@ export class WorkoutController {
   @Post('active')
   async turnActive(
     @Body() input: { userId: string; workoutId: string },
-  ): Promise<HttpResponse<boolean>> {
+    @Res() res: Response,
+  ): Promise<Response<boolean>> {
     try {
       const handle = await this.service.turnActive(input);
-      return {
-        statusCode: 200,
+      return res.status(200).json({
         data: handle,
-      };
+      });
     } catch (err) {
-      return {
-        statusCode: 500,
+      return res.status(400).json({
         data: err,
-      };
+      });
     }
   }
 }
