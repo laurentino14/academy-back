@@ -15,7 +15,9 @@ import { verifyCPF } from '../utils/verifyCPF';
 @Injectable()
 export class UserService implements UserUseCases {
   constructor(private readonly repo: UserRepository) {}
-  async updatePassword(input: UpdateUserPasswordContract): Promise<User> {
+  async updatePassword(
+    input: UpdateUserPasswordContract,
+  ): Promise<UserContract> {
     if (input.password !== input.passwordConfirmation)
       throw new Error('As senhas não coincidem');
 
@@ -63,13 +65,13 @@ export class UserService implements UserUseCases {
     return await this.repo.delete(input);
   }
 
-  async toInstructor(input: string): Promise<User> {
+  async toInstructor(input: string): Promise<UserContract> {
     return await this.repo.toInstructor(Number(input));
   }
-  async toUser(input: string): Promise<User> {
+  async toUser(input: string): Promise<UserContract> {
     return await this.repo.toUser(input);
   }
-  async toAdmin(input: string): Promise<User> {
+  async toAdmin(input: string): Promise<UserContract> {
     return await this.repo.toAdmin(input);
   }
 }

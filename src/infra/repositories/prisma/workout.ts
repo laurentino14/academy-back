@@ -6,7 +6,6 @@ import {
   CreateWorkoutInputRepoContract,
   WorkoutRepository,
 } from 'src/data/contracts/repositories/workout';
-import { Workout } from 'src/domain/entities/workout';
 import { UpdateWorkoutInput } from 'src/domain/use-cases/workout';
 import { PrismaDB } from 'src/infra/data-sources/prisma';
 
@@ -120,7 +119,7 @@ export class PrismaWorkoutRepository implements WorkoutRepository {
 
     return db;
   }
-  async getByInstructorId(input: string): Promise<Workout[]> {
+  async getByInstructorId(input: string): Promise<WorkoutContract[]> {
     const db = await this.db.workout.findMany({
       where: {
         instructorId: input,
@@ -136,7 +135,7 @@ export class PrismaWorkoutRepository implements WorkoutRepository {
 
     return db;
   }
-  async delete(input: string): Promise<Workout> {
+  async delete(input: string): Promise<WorkoutContract> {
     const db = await this.db.workout.delete({
       where: {
         id: input,
