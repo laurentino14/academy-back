@@ -191,14 +191,14 @@ export class HistoryController {
   async changeStars(
     @Body() input: { id: string; stars: number },
     @Res() res: Response,
-  ): Promise<boolean> {
+  ): Promise<Response<boolean>> {
     try {
       const data = await this.service.changeStars(input);
-      res.status(200);
-      return data;
+      return res.status(200).send(data);
     } catch (err) {
-      res.status(400);
-      return err.message;
+      return res.status(400).json({
+        data: err.message,
+      });
     }
   }
 
